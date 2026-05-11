@@ -1463,18 +1463,27 @@
                 }
             });
 
-            checkpointPositions.forEach((pos, index) => {
-                const triggerStart = pos - 1000;
-                const triggerEnd = pos + 1000;
+            const checkpointThresholds = checkpointPositions.map(pos => pos / totalScrollHeight);
 
-                ScrollTrigger.create({
-                    trigger: "#scroll-container",
-                    start: `${triggerStart}px top`,
-                    end: `${triggerEnd}px top`,
-                    onEnter: () => activateCheckpoint(index + 1),
-                    onLeave: () => deactivateCheckpoint()
-                });
-            });
+            function checkCheckpoint() {
+                const progress = scrollProgress;
+                let activeIndex = 0;
+
+                for (let i = checkpointThresholds.length - 1; i >= 0; i--) {
+                    if (progress >= checkpointThresholds[i] - 0.08 && progress <= checkpointThresholds[i] + 0.08) {
+                        activeIndex = i + 1;
+                        break;
+                    }
+                }
+
+                if (activeIndex !== currentCheckpoint) {
+                    if (activeIndex > 0) {
+                        activateCheckpoint(activeIndex);
+                    } else {
+                        deactivateCheckpoint();
+                    }
+                }
+            }
 
             gsap.to("#progress-fill", {
                 width: "100%",
@@ -1535,6 +1544,7 @@
             const scrollPx = scrollProgress * totalScrollHeight;
             const speed = Math.abs(velocity) * 1000;
             updateUI(speed, scrollPx);
+            checkCheckpoint();
 
             const time = Date.now() * 0.001;
 
