@@ -1,1698 +1,2027 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dev Journey - Cinematic Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alex Chen — Dev Journey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --sky-top: #0f0c29;
-            --sky-mid: #302b63;
-            --sky-horizon: #ff6b35;
-            --road-dark: #1a1a2e;
-            --neon-pink: #ff2e63;
-            --neon-cyan: #08f7fe;
-            --accent-magenta: #e91e8c;
-            --accent-cyan: #00fff5;
-            --text-primary: #ffffff;
-            --text-secondary: #b8b5d6;
-            --ui-panel: rgba(10, 10, 30, 0.85);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: var(--sky-top);
-            color: var(--text-primary);
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        #scroll-container {
-            position: relative;
-            height: 50000px;
-            width: 100%;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .parallax-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            will-change: transform;
-        }
-
-        #sky-layer {
-            z-index: 1;
-            background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 40%, var(--sky-horizon) 80%, #ff9a5c 100%);
-        }
-
-        #stars-layer {
-            z-index: 2;
-            opacity: 0;
-            background: transparent;
-        }
-
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 2s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        #mountains-layer {
-            z-index: 3;
-            background: linear-gradient(180deg, transparent 50%, #1a1a3e 70%, #0f0c29 100%);
-        }
-
-        .mountain {
-            position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-bottom: 200px solid #1a1a3e;
-        }
-
-        #city-layer {
-            z-index: 4;
-        }
-
-        .building {
-            position: absolute;
-            bottom: 0;
-            background: linear-gradient(180deg, #12122a 0%, #1a1a3e 100%);
-        }
-
-        .building::after {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 80%;
-            height: 90%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 10px,
-                rgba(255, 46, 99, 0.3) 10px,
-                rgba(255, 46, 99, 0.3) 12px
-            );
-        }
-
-        #road-layer {
-            z-index: 5;
-            perspective: 800px;
-            overflow: hidden;
-        }
-
-        .road-surface {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%) rotateX(60deg);
-            width: 200%;
-            height: 100vh;
-            background: linear-gradient(180deg, transparent 0%, var(--road-dark) 30%);
-        }
-
-        .road-lines {
-            position: absolute;
-            bottom: 30%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: 200px;
-            background: repeating-linear-gradient(
-                180deg,
-                transparent,
-                transparent 40px,
-                var(--neon-pink) 40px,
-                var(--neon-pink) 80px
-            );
-            animation: roadMove 0.5s linear infinite;
-            box-shadow: 0 0 20px var(--neon-pink);
-        }
-
-        @keyframes roadMove {
-            from { background-position: 0 0; }
-            to { background-position: 0 80px; }
-        }
-
-        #particles-layer {
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: var(--neon-cyan);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: particleFloat 8s linear infinite;
-        }
-
-        @keyframes particleFloat {
-            0% { transform: translateX(-10vw) translateY(100vh); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateX(110vw) translateY(-100px); opacity: 0; }
-        }
-
-        #ui-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        #progress-indicator {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px var(--neon-cyan);
-            opacity: 0.8;
-        }
-
-        #progress-bar {
-            width: 150px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        #progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        #speed-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 30px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            color: var(--accent-magenta);
-            text-shadow: 0 0 10px var(--accent-magenta);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .checkpoint {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .checkpoint.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .checkpoint-content {
-            max-width: 900px;
-            padding: 40px;
-            background: var(--ui-panel);
-            border: 1px solid var(--neon-pink);
-            border-radius: 20px;
-            box-shadow: 0 0 40px rgba(255, 46, 99, 0.3), inset 0 0 60px rgba(0, 255, 245, 0.05);
-            backdrop-filter: blur(20px);
-            transform: translateY(30px);
-            opacity: 0;
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .checkpoint.active .checkpoint-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .checkpoint-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .checkpoint-subtitle {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 20px;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-
-        #checkpoint-1 .checkpoint-content {
-            text-align: center;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin: 0 auto 30px;
-            background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
-            padding: 4px;
-            animation: profileGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes profileGlow {
-            0%, 100% { box-shadow: 0 0 30px var(--neon-pink); }
-            50% { box-shadow: 0 0 50px var(--neon-cyan); }
-        }
-
-        .profile-image-inner {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: var(--road-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 48px;
-            color: var(--neon-cyan);
-        }
-
-        .profile-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .profile-title {
-            font-size: 24px;
-            color: var(--neon-cyan);
-            margin-bottom: 20px;
-        }
-
-        .profile-bio {
-            font-size: 18px;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        #checkpoint-2 .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .skill-category {
-            padding: 25px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 46, 99, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .skill-category:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 30px rgba(8, 247, 254, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .skill-category-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            color: var(--neon-pink);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .skill-category-title::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--neon-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        .skill-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            cursor: pointer;
-        }
-
-        .skill-name {
-            font-size: 16px;
-            color: var(--text-primary);
-            width: 120px;
-        }
-
-        .skill-bar {
-            flex: 1;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 0 15px;
-        }
-
-        .skill-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-pink), var(--accent-magenta));
-            border-radius: 3px;
-            width: 0;
-            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
-
-        .skill-percent {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            color: var(--neon-cyan);
-            width: 40px;
-        }
-
-        #checkpoint-3 .projects-container {
-            display: flex;
-            gap: 30px;
-            overflow-x: auto;
-            padding: 20px 0;
-            scroll-behavior: smooth;
-        }
-
-        .project-card {
-            min-width: 280px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 46, 99, 0.2);
-            padding: 25px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent 40%, rgba(0, 255, 245, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .project-card:hover {
-            border-color: var(--neon-cyan);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(8, 247, 254, 0.3);
-        }
-
-        .project-card:hover::before {
-            opacity: 1;
-        }
-
-        .project-thumbnail {
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(135deg, var(--sky-mid), var(--road-dark));
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 36px;
-            color: var(--neon-pink);
-            text-shadow: 0 0 20px var(--neon-pink);
-        }
-
-        .project-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-
-        .project-description {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tech-tag {
-            font-size: 11px;
-            padding: 4px 10px;
-            background: rgba(255, 46, 99, 0.2);
-            border-radius: 20px;
-            color: var(--neon-cyan);
-            border: 1px solid rgba(8, 247, 254, 0.3);
-        }
-
-        #checkpoint-4 .timeline {
-            position: relative;
-            padding: 30px 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--neon-pink), var(--neon-cyan), var(--accent-magenta));
-            transform: translateX(-50%);
-        }
-
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .timeline-item:nth-child(odd) {
-            flex-direction: row;
-        }
-
-        .timeline-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .timeline-content {
-            width: 45%;
-            padding: 25px;
-            background: var(--ui-panel);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 46, 99, 0.3);
-            position: relative;
-        }
-
-        .timeline-content::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 20px;
-            height: 20px;
-            background: var(--neon-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content::after {
-            right: -57%;
-        }
-
-        .timeline-item:nth-child(even) .timeline-content::after {
-            left: -57%;
-        }
-
-        .timeline-year {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
-            color: var(--neon-pink);
-            margin-bottom: 10px;
-        }
-
-        .timeline-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .timeline-company {
-            font-size: 14px;
-            color: var(--neon-cyan);
-            margin-bottom: 10px;
-        }
-
-        .timeline-description {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .achievement-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-            padding: 8px 15px;
-            background: linear-gradient(135deg, rgba(233, 30, 140, 0.2), rgba(0, 255, 245, 0.2));
-            border-radius: 25px;
-            border: 1px solid var(--accent-magenta);
-        }
-
-        .achievement-badge::before {
-            content: '★';
-            color: var(--accent-magenta);
-        }
-
-        #checkpoint-5 .contact-container {
-            text-align: center;
-        }
-
-        .terminal-window {
-            background: #0a0a1a;
-            border-radius: 15px;
-            border: 1px solid var(--neon-cyan);
-            padding: 30px;
-            margin-top: 30px;
-            text-align: left;
-            box-shadow: 0 0 40px rgba(8, 247, 254, 0.2);
-        }
-
-        .terminal-header {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .terminal-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .terminal-dot.red { background: #ff5f57; }
-        .terminal-dot.yellow { background: #febc2e; }
-        .terminal-dot.green { background: #28c840; }
-
-        .terminal-body {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-
-        .terminal-line {
-            margin-bottom: 10px;
-        }
-
-        .terminal-prompt {
-            color: var(--neon-cyan);
-        }
-
-        .terminal-command {
-            color: var(--text-primary);
-        }
-
-        .contact-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .contact-btn {
-            padding: 15px 30px;
-            background: transparent;
-            border: 2px solid var(--neon-pink);
-            border-radius: 30px;
-            color: var(--text-primary);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 46, 99, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .contact-btn:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 30px rgba(8, 247, 254, 0.4);
-            transform: translateY(-3px);
-        }
-
-        .contact-btn:hover::before {
-            left: 100%;
-        }
-
-        .contact-btn .btn-icon {
-            margin-right: 10px;
-        }
-
-        .dismiss-hint {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            color: var(--text-secondary);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .checkpoint.active .dismiss-hint {
-            opacity: 0.6;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 0.3; }
-        }
-
-        #intro-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            background: linear-gradient(180deg, var(--sky-top), var(--sky-mid));
-            transition: opacity 1s ease, visibility 1s ease;
-        }
-
-        #intro-overlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .intro-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 72px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            animation: titleGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes titleGlow {
-            0%, 100% { filter: drop-shadow(0 0 20px var(--neon-pink)); }
-            50% { filter: drop-shadow(0 0 40px var(--neon-cyan)); }
-        }
-
-        .intro-subtitle {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 24px;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-        }
-
-        .start-btn {
-            padding: 20px 50px;
-            background: transparent;
-            border: 2px solid var(--neon-pink);
-            border-radius: 50px;
-            color: var(--text-primary);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: btnPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes btnPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 46, 99, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(8, 247, 254, 0.5); }
-        }
-
-        .start-btn:hover {
-            background: var(--neon-pink);
-            transform: scale(1.05);
-        }
-
-        .intro-scroll-hint {
-            position: absolute;
-            bottom: 50px;
-            font-size: 14px;
-            color: var(--neon-cyan);
-            animation: scrollHint 2s ease-in-out infinite;
-        }
-
-        @keyframes scrollHint {
-            0%, 100% { transform: translateY(0); opacity: 1; }
-            50% { transform: translateY(10px); opacity: 0.5; }
-        }
-
-        .neon-text {
-            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
-        }
-
-        .glow-box {
-            box-shadow: 0 0 20px var(--neon-pink), inset 0 0 20px rgba(255, 46, 99, 0.1);
-        }
-
-        @media (max-width: 768px) {
-            .checkpoint-title {
-                font-size: 32px;
-            }
-
-            .profile-name {
-                font-size: 28px;
-            }
-
-            #checkpoint-2 .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .timeline::before {
-                left: 20px;
-            }
-
-            .timeline-content {
-                width: calc(100% - 50px);
-                margin-left: 50px;
-            }
-
-            .timeline-content::after {
-                left: -37px !important;
-                right: auto !important;
-            }
-
-            .intro-title {
-                font-size: 36px;
-            }
-
-            .contact-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --pink: #ff2e63;
+        --cyan: #08f7fe;
+        --accent: #e91e8c;
+        --accent2: #00fff5;
+        --text: #ffffff;
+        --soft: #b8b5d6;
+        --panel: rgba(8, 8, 25, 0.88);
+      }
+      html {
+        overflow-x: hidden;
+        scroll-behavior: auto;
+      }
+      body {
+        font-family: "Rajdhani", sans-serif;
+        background: #000;
+        overflow-x: hidden;
+      }
+      #scroll-space {
+        position: relative;
+        pointer-events: none;
+      }
+      #sky-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 0;
+        background: linear-gradient(
+          to bottom,
+          #0f0c29 0%,
+          #302b63 40%,
+          #7c3d6e 65%,
+          #ff6b35 85%,
+          #ff9a5c 100%
+        );
+      }
+      #stars-canvas,
+      #particles-canvas,
+      #three-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+      #three-canvas {
+        z-index: 2;
+      }
+      #particles-canvas {
+        z-index: 6;
+        pointer-events: none;
+      }
+      #stars-canvas {
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 2s;
+      }
+      .vignette {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 7;
+        pointer-events: none;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 45%,
+          rgba(0, 0, 0, 0.75) 100%
+        );
+      }
+      .scanlines {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 8;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 3px,
+          rgba(0, 0, 0, 0.04) 3px,
+          rgba(0, 0, 0, 0.04) 4px
+        );
+      }
+      /* HERO */
+      #hero {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -58%);
+        text-align: center;
+        z-index: 50;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      #hero h1 {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(32px, 6vw, 80px);
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: 8px;
+        text-shadow:
+          0 0 30px var(--cyan),
+          0 0 80px var(--accent),
+          0 0 160px rgba(233, 30, 140, 0.3);
+        animation: glow 3s ease-in-out infinite alternate;
+      }
+      #hero .sub {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(10px, 1.5vw, 16px);
+        color: var(--soft);
+        letter-spacing: 10px;
+        text-transform: uppercase;
+        margin-top: 14px;
+      }
+      @keyframes glow {
+        from {
+          text-shadow:
+            0 0 20px var(--cyan),
+            0 0 50px var(--accent);
+        }
+        to {
+          text-shadow:
+            0 0 60px var(--cyan),
+            0 0 120px var(--accent),
+            0 0 220px rgba(255, 46, 99, 0.4);
+        }
+      }
+      /* SCROLL HINT */
+      #scroll-hint {
+        position: fixed;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        z-index: 60;
+        animation:
+          fadeUp 1.5s ease 1.2s both,
+          breathe 2.5s ease infinite;
+        pointer-events: none;
+      }
+      #scroll-hint span {
+        font-family: "Orbitron", monospace;
+        font-size: 10px;
+        letter-spacing: 5px;
+        color: var(--soft);
+      }
+      .arr {
+        width: 18px;
+        height: 18px;
+        border-right: 2px solid var(--cyan);
+        border-bottom: 2px solid var(--cyan);
+        transform: rotate(45deg);
+        animation: bounce 1.5s ease infinite;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: rotate(45deg) translate(0, 0);
+        }
+        50% {
+          transform: rotate(45deg) translate(3px, 3px);
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          opacity: 0.7;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      /* HUD */
+      #hud {
+        position: fixed;
+        z-index: 80;
+        pointer-events: none;
+      }
+      #progress-track {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      #prog-bar {
+        width: 2px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      #prog-fill {
+        width: 100%;
+        height: 0%;
+        background: linear-gradient(to bottom, var(--cyan), var(--accent));
+        border-radius: 2px;
+        box-shadow: 0 0 8px var(--cyan);
+      }
+      #prog-label {
+        font-family: "Orbitron", monospace;
+        font-size: 9px;
+        color: rgba(184, 181, 214, 0.6);
+        letter-spacing: 3px;
+        writing-mode: vertical-rl;
+      }
+      #speed-hud {
+        position: fixed;
+        bottom: 28px;
+        left: 28px;
+        font-family: "Orbitron", monospace;
+        font-size: 11px;
+        color: var(--cyan);
+        letter-spacing: 2px;
+        opacity: 0.7;
+      }
+      #section-tag {
+        position: fixed;
+        top: 28px;
+        left: 28px;
+        font-family: "Orbitron", monospace;
+        font-size: 10px;
+        letter-spacing: 4px;
+        color: var(--soft);
+        opacity: 0;
+        transition: opacity 0.6s;
+        z-index: 80;
+        pointer-events: none;
+      }
+      /* CHECKPOINT OVERLAYS */
+      .cp-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(0px);
+      }
+      .cp-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+        backdrop-filter: blur(5px);
+      }
+      .cp-panel {
+        background: var(--panel);
+        border: 1px solid rgba(0, 255, 245, 0.18);
+        padding: 44px 48px;
+        max-width: 860px;
+        width: 92%;
+        max-height: 88vh;
+        overflow-y: auto;
+        position: relative;
+        border-radius: 2px;
+        box-shadow:
+          0 0 80px rgba(0, 255, 245, 0.07),
+          0 0 200px rgba(233, 30, 140, 0.05),
+          inset 0 0 60px rgba(0, 0, 0, 0.5);
+      }
+      .cp-panel::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--cyan),
+          var(--accent),
+          transparent
+        );
+      }
+      .cp-panel::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 255, 245, 0.3),
+          transparent
+        );
+      }
+      .sec-label {
+        font-family: "Orbitron", monospace;
+        font-size: 10px;
+        letter-spacing: 6px;
+        color: var(--cyan);
+        margin-bottom: 14px;
+        opacity: 0.8;
+      }
+      .cp-h {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(26px, 4vw, 50px);
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 22px;
+        text-shadow: 0 0 40px rgba(0, 255, 245, 0.3);
+      }
+      .cp-body {
+        font-size: 17px;
+        line-height: 1.75;
+        color: var(--soft);
+        margin-bottom: 28px;
+      }
+      .ghost-num {
+        font-family: "Orbitron", monospace;
+        font-size: 110px;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.025);
+        position: absolute;
+        top: -10px;
+        right: 18px;
+        line-height: 1;
+        user-select: none;
+        pointer-events: none;
+      }
+      .btn-close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: var(--soft);
+        font-family: "Orbitron", monospace;
+        font-size: 10px;
+        letter-spacing: 2px;
+        padding: 7px 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-close:hover {
+        border-color: var(--pink);
+        color: var(--pink);
+      }
+      .btn-cont {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: transparent;
+        border: 1px solid var(--cyan);
+        color: var(--cyan);
+        font-family: "Orbitron", monospace;
+        font-size: 11px;
+        letter-spacing: 3px;
+        padding: 13px 26px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        margin-top: 8px;
+      }
+      .btn-cont:hover {
+        background: var(--cyan);
+        color: #000;
+        box-shadow: 0 0 30px var(--cyan);
+      }
+      .divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 255, 245, 0.25),
+          rgba(233, 30, 140, 0.25),
+          transparent
+        );
+        margin: 24px 0;
+      }
+      /* ABOUT */
+      .about-row {
+        display: flex;
+        gap: 36px;
+        align-items: flex-start;
+        margin-bottom: 28px;
+      }
+      .avatar {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--pink), var(--cyan));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Orbitron", monospace;
+        font-size: 36px;
+        font-weight: 900;
+        color: #000;
+        box-shadow:
+          0 0 50px rgba(233, 30, 140, 0.4),
+          0 0 100px rgba(8, 247, 254, 0.15);
+      }
+      .about-name {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(20px, 3vw, 30px);
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 4px;
+      }
+      .about-title {
+        font-family: "Orbitron", monospace;
+        font-size: 13px;
+        color: var(--cyan);
+        letter-spacing: 4px;
+        margin-bottom: 14px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .tag {
+        padding: 5px 14px;
+        border: 1px solid rgba(0, 255, 245, 0.25);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--cyan);
+        letter-spacing: 1px;
+        font-family: "Rajdhani", sans-serif;
+      }
+      /* SKILLS */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        margin-bottom: 28px;
+      }
+      .skill-cat h3 {
+        font-family: "Orbitron", monospace;
+        font-size: 12px;
+        letter-spacing: 3px;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(233, 30, 140, 0.25);
+      }
+      .skill-item {
+        margin-bottom: 12px;
+      }
+      .skill-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 5px;
+      }
+      .skill-row span:last-child {
+        color: var(--soft);
+        font-size: 12px;
+      }
+      .skill-track {
+        height: 2px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 1px;
+        overflow: hidden;
+      }
+      .skill-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--cyan), var(--accent));
+        border-radius: 1px;
+        transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow: 0 0 8px var(--cyan);
+      }
+      /* PROJECTS */
+      .proj-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+      .proj-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 22px;
+        cursor: pointer;
+        transition: all 0.35s;
+        position: relative;
+        overflow: hidden;
+      }
+      .proj-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 255, 245, 0.04),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+      .proj-card:hover::before {
+        left: 140%;
+      }
+      .proj-card:hover {
+        border-color: rgba(0, 255, 245, 0.35);
+        box-shadow: 0 0 30px rgba(0, 255, 245, 0.07);
+        transform: translateY(-2px);
+      }
+      .proj-num {
+        font-family: "Orbitron", monospace;
+        font-size: 10px;
+        color: var(--cyan);
+        letter-spacing: 3px;
+        margin-bottom: 9px;
+        opacity: 0.55;
+      }
+      .proj-name {
+        font-family: "Orbitron", monospace;
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .proj-desc {
+        font-size: 13px;
+        color: var(--soft);
+        line-height: 1.55;
+        margin-bottom: 12px;
+      }
+      .tech-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .tech {
+        font-size: 11px;
+        padding: 3px 9px;
+        background: rgba(233, 30, 140, 0.12);
+        border: 1px solid rgba(233, 30, 140, 0.25);
+        color: var(--accent);
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+      /* TIMELINE */
+      .timeline {
+        position: relative;
+        padding-left: 26px;
+        margin-bottom: 28px;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 4px;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(
+          to bottom,
+          var(--cyan),
+          var(--accent),
+          rgba(233, 30, 140, 0.1)
+        );
+      }
+      .tl-item {
+        position: relative;
+        padding: 0 0 28px 22px;
+        opacity: 0;
+        transform: translateX(-16px);
+        transition: all 0.5s ease;
+      }
+      .tl-item.in {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .tl-dot {
+        position: absolute;
+        left: -5px;
+        top: 5px;
+        width: 9px;
+        height: 9px;
+        background: var(--cyan);
+        border-radius: 50%;
+        box-shadow: 0 0 12px var(--cyan);
+      }
+      .tl-year {
+        font-family: "Orbitron", monospace;
+        font-size: 11px;
+        color: var(--cyan);
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+      }
+      .tl-role {
+        font-family: "Orbitron", monospace;
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 3px;
+      }
+      .tl-company {
+        font-size: 14px;
+        color: var(--accent);
+        margin-bottom: 7px;
+      }
+      .tl-desc {
+        font-size: 13px;
+        color: var(--soft);
+        line-height: 1.6;
+      }
+      /* CONTACT */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .contact-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        cursor: pointer;
+        transition: all 0.3s;
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .contact-card:hover {
+        border-color: var(--cyan);
+        background: rgba(0, 255, 245, 0.04);
+        box-shadow: 0 0 20px rgba(0, 255, 245, 0.08);
+      }
+      .c-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 3px;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--pink), var(--cyan));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: #000;
+      }
+      .c-label {
+        font-family: "Orbitron", monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: var(--soft);
+        display: block;
+        margin-bottom: 3px;
+      }
+      .c-val {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      #copy-msg {
+        font-family: "Orbitron", monospace;
+        font-size: 11px;
+        letter-spacing: 3px;
+        color: var(--cyan);
+        opacity: 0;
+        transition: opacity 0.3s;
+        margin-bottom: 14px;
+        display: block;
+      }
+      /* LOADING */
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+      }
+      #loading h2 {
+        font-family: "Orbitron", monospace;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--cyan);
+        letter-spacing: 6px;
+        text-shadow: 0 0 30px var(--cyan);
+      }
+      .ld-track {
+        width: 280px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 1px;
+        overflow: hidden;
+      }
+      .ld-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--cyan), var(--accent));
+        transition: width 0.4s ease;
+        box-shadow: 0 0 10px var(--cyan);
+      }
+      .ld-msg {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 12px;
+        letter-spacing: 3px;
+        color: var(--soft);
+      }
+      /* JOURNEY COMPLETE */
+      #done {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Orbitron", monospace;
+        font-size: 10px;
+        letter-spacing: 4px;
+        color: var(--cyan);
+        opacity: 0;
+        transition: opacity 1s;
+        z-index: 90;
+        text-align: center;
+        pointer-events: none;
+        text-shadow: 0 0 20px var(--cyan);
+      }
+      /* RESPONSIVE */
+      @media (max-width: 600px) {
+        .cp-panel {
+          padding: 28px 22px;
+        }
+        .skills-grid,
+        .proj-grid,
+        .contact-grid {
+          grid-template-columns: 1fr;
+        }
+        .about-row {
+          flex-direction: column;
+        }
+        .ghost-num {
+          font-size: 70px;
+        }
+      }
+      @media (max-width: 768px) {
+        .skills-grid,
+        .proj-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
-</head>
-<body>
-    <div id="intro-overlay">
-        <h1 class="intro-title">DEV JOURNEY</h1>
-        <p class="intro-subtitle">A Cinematic Portfolio Experience</p>
-        <button class="start-btn" onclick="startJourney()">START ENGINE</button>
-        <p class="intro-scroll-hint">↑ Scroll to drive ↑</p>
+  </head>
+  <body>
+    <!-- Loading -->
+    <div id="loading">
+      <h2>DEV JOURNEY</h2>
+      <div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div>
+      <p class="ld-msg" id="ld-msg">INITIALIZING SCENE</p>
     </div>
 
-    <div id="canvas-container"></div>
+    <!-- Scroll space (creates scrollable length) -->
+    <div id="scroll-space"></div>
 
-    <div class="parallax-layer" id="sky-layer"></div>
-    <div class="parallax-layer" id="stars-layer"></div>
-    <div class="parallax-layer" id="mountains-layer"></div>
-    <div class="parallax-layer" id="city-layer"></div>
-    <div class="parallax-layer" id="road-layer">
-        <div class="road-surface">
-            <div class="road-lines" id="road-lines"></div>
-        </div>
-    </div>
-    <div class="parallax-layer" id="particles-layer"></div>
+    <!-- Sky -->
+    <div id="sky-bg"></div>
 
-    <div id="ui-layer">
-        <div id="progress-indicator">
-            <span id="progress-text">0%</span>
-            <div id="progress-bar">
-                <div id="progress-fill"></div>
-            </div>
-        </div>
-        <div id="speed-indicator">
-            <span id="speed-value">0</span> KM/H
-        </div>
-    </div>
+    <!-- Stars -->
+    <canvas id="stars-canvas"></canvas>
 
-    <div id="scroll-container">
-        <div class="checkpoint" id="checkpoint-1" data-scroll="8000">
-            <div class="checkpoint-content">
-                <h2 class="checkpoint-title">ABOUT ME</h2>
-                <p class="checkpoint-subtitle">The journey begins</p>
-                <div class="profile-image">
-                    <div class="profile-image-inner">AC</div>
-                </div>
-                <h3 class="profile-name">Alex Chen</h3>
-                <p class="profile-title">Creative Developer & UI Architect</p>
-                <p class="profile-bio">
-                    Full-stack developer with 5+ years of experience crafting immersive digital experiences.
-                    Passionate about the intersection of design and technology, creating experiences that
-                    inspire and engage. Specializing in WebGL, interactive interfaces, and creative coding.
-                </p>
-                <p class="dismiss-hint">↓ Scroll to continue your journey ↓</p>
-            </div>
-        </div>
+    <!-- Three.js -->
+    <canvas id="three-canvas"></canvas>
 
-        <div class="checkpoint" id="checkpoint-2" data-scroll="18000">
-            <div class="checkpoint-content">
-                <h2 class="checkpoint-title">SKILLS</h2>
-                <p class="checkpoint-subtitle">Tools of the trade</p>
-                <div class="skills-grid">
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Frontend</h3>
-                        <div class="skill-item">
-                            <span class="skill-name">JavaScript</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
-                            <span class="skill-percent">95%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">React</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-                            <span class="skill-percent">90%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Three.js</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
-                            <span class="skill-percent">85%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">CSS/Animation</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
-                            <span class="skill-percent">92%</span>
-                        </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Backend</h3>
-                        <div class="skill-item">
-                            <span class="skill-name">Node.js</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-                            <span class="skill-percent">88%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Python</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
-                            <span class="skill-percent">80%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">PostgreSQL</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="82"></div></div>
-                            <span class="skill-percent">82%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">GraphQL</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="78"></div></div>
-                            <span class="skill-percent">78%</span>
-                        </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Tools</h3>
-                        <div class="skill-item">
-                            <span class="skill-name">Git</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-                            <span class="skill-percent">90%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Docker</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
-                            <span class="skill-percent">75%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Figma</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
-                            <span class="skill-percent">85%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Blender</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="70"></div></div>
-                            <span class="skill-percent">70%</span>
-                        </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Soft Skills</h3>
-                        <div class="skill-item">
-                            <span class="skill-name">Leadership</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-                            <span class="skill-percent">88%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Problem Solving</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
-                            <span class="skill-percent">95%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Communication</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-                            <span class="skill-percent">90%</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Creativity</span>
-                            <div class="skill-bar"><div class="skill-fill" data-width="98"></div></div>
-                            <span class="skill-percent">98%</span>
-                        </div>
-                    </div>
-                </div>
-                <p class="dismiss-hint">↓ Scroll to continue ↓</p>
-            </div>
-        </div>
+    <!-- Particles -->
+    <canvas id="particles-canvas"></canvas>
 
-        <div class="checkpoint" id="checkpoint-3" data-scroll="28000">
-            <div class="checkpoint-content">
-                <h2 class="checkpoint-title">PROJECTS</h2>
-                <p class="checkpoint-subtitle">Milestones along the way</p>
-                <div class="projects-container">
-                    <div class="project-card">
-                        <div class="project-thumbnail">◈</div>
-                        <h3 class="project-title">Neural Visualizer</h3>
-                        <p class="project-description">AI-powered data visualization tool with real-time neural network representation and interactive exploration.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Three.js</span>
-                            <span class="tech-tag">TensorFlow.js</span>
-                            <span class="tech-tag">React</span>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-thumbnail">◈</div>
-                        <h3 class="project-title">Cyber Commerce</h3>
-                        <p class="project-description">Next-gen e-commerce platform featuring immersive 3D product views and AI recommendations.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">WebGL</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">MongoDB</span>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-thumbnail">◈</div>
-                        <h3 class="project-title">Synthwave Radio</h3>
-                        <p class="project-description">Streaming music application with reactive visuals and spatial audio experience.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Web Audio API</span>
-                            <span class="tech-tag">Canvas</span>
-                            <span class="tech-tag">Express</span>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-thumbnail">◈</div>
-                        <h3 class="project-title">Portfolio Engine</h3>
-                        <p class="project-description">CMS for creative portfolios with 3D scene builder and animations.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Vue.js</span>
-                            <span class="tech-tag">GSAP</span>
-                            <span class="tech-tag">Firebase</span>
-                        </div>
-                    </div>
-                </div>
-                <p class="dismiss-hint">↓ Scroll to continue ↓</p>
-            </div>
-        </div>
+    <!-- Vignette & Scanlines -->
+    <div class="vignette"></div>
+    <div class="scanlines"></div>
 
-        <div class="checkpoint" id="checkpoint-4" data-scroll="38000">
-            <div class="checkpoint-content">
-                <h2 class="checkpoint-title">EXPERIENCE</h2>
-                <p class="checkpoint-subtitle">The road traveled</p>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-year">2024</div>
-                            <h3 class="timeline-title">Senior Developer</h3>
-                            <p class="timeline-company">@ TechCorp</p>
-                            <p class="timeline-description">Leading a team of 5 developers, architecting scalable web applications, and mentoring junior developers.</p>
-                            <div class="achievement-badge">Team Lead</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-year">2022</div>
-                            <h3 class="timeline-title">Full Stack Developer</h3>
-                            <p class="timeline-company">@ StartupXYZ</p>
-                            <p class="timeline-description">Built MVP from ground up, implemented real-time features, scaled to 100k users.</p>
-                            <div class="achievement-badge">Fastest Growth</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-year">2020</div>
-                            <h3 class="timeline-title">Junior Developer</h3>
-                            <p class="timeline-company">@ Agency123</p>
-                            <p class="timeline-description">Developed 20+ client websites, learned modern frameworks, mastered responsive design.</p>
-                            <div class="achievement-badge">Rising Star</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-year">2019</div>
-                            <h3 class="timeline-title">The Beginning</h3>
-                            <p class="timeline-company">Self-taught journey</p>
-                            <p class="timeline-description">Started coding with HTML & CSS, fell in love with the web, committed to becoming a developer.</p>
-                            <div class="achievement-badge">First Commit</div>
-                        </div>
-                    </div>
-                </div>
-                <p class="dismiss-hint">↓ Scroll to destination ↓</p>
-            </div>
-        </div>
-
-        <div class="checkpoint" id="checkpoint-5" data-scroll="45000">
-            <div class="checkpoint-content">
-                <h2 class="checkpoint-title">CONTACT</h2>
-                <p class="checkpoint-subtitle">Let's connect</p>
-                <div class="contact-container">
-                    <div class="terminal-window">
-                        <div class="terminal-header">
-                            <div class="terminal-dot red"></div>
-                            <div class="terminal-dot yellow"></div>
-                            <div class="terminal-dot green"></div>
-                        </div>
-                        <div class="terminal-body">
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">alex@portfolio:~$</span>
-                                <span class="terminal-command"> ./init_connection.sh</span>
-                            </div>
-                            <div class="terminal-line" style="color: var(--neon-cyan);">
-                                > Connection established...
-                            </div>
-                            <div class="terminal-line" style="color: var(--neon-cyan);">
-                                > Ready to receive transmission
-                            </div>
-                        </div>
-                    </div>
-                    <div class="contact-buttons">
-                        <button class="contact-btn" onclick="copyToClipboard('alex@example.com')">
-                            <span class="btn-icon">✉</span>Email
-                        </button>
-                        <button class="contact-btn" onclick="window.open('https://github.com/alexchen', '_blank')">
-                            <span class="btn-icon">⌘</span>GitHub
-                        </button>
-                        <button class="contact-btn" onclick="window.open('https://linkedin.com/in/alexchen', '_blank')">
-                            <span class="btn-icon">◈</span>LinkedIn
-                        </button>
-                        <button class="contact-btn" onclick="window.open('https://twitter.com/alexchendev', '_blank')">
-                            <span class="btn-icon">◉</span>Twitter
-                        </button>
-                    </div>
-                </div>
-                <p class="dismiss-hint" style="bottom: 20px;">Thank you for traveling with me!</p>
-            </div>
-        </div>
+    <!-- Hero -->
+    <div id="hero">
+      <h1>ALEX CHEN</h1>
+      <div class="sub">Creative Developer &nbsp;·&nbsp; Digital Craftsman</div>
     </div>
 
+    <!-- Scroll hint -->
+    <div id="scroll-hint">
+      <span>SCROLL TO DRIVE</span>
+      <div class="arr"></div>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud">
+      <div id="progress-track">
+        <div id="prog-bar"><div id="prog-fill"></div></div>
+        <span id="prog-label">JOURNEY</span>
+      </div>
+      <div id="speed-hud">SPD:&nbsp;<span id="spd">000</span>&nbsp;km/h</div>
+      <div id="section-tag">// INTRO</div>
+    </div>
+
+    <!-- Journey complete -->
+    <div id="done">
+      ✦&nbsp; DESTINATION REACHED &nbsp;✦<br /><span
+        style="font-size: 9px; opacity: 0.6; letter-spacing: 2px"
+        >alex@example.com</span
+      >
+    </div>
+
+    <!-- ─────────── CHECKPOINT OVERLAYS ─────────── -->
+
+    <!-- CP1 · ABOUT -->
+    <div id="cp1" class="cp-overlay">
+      <div class="cp-panel">
+        <div class="ghost-num">01</div>
+        <button class="btn-close" onclick="closeCP('cp1')">ESC / CLOSE</button>
+        <div class="sec-label">
+          // Checkpoint 01 &nbsp;—&nbsp; Billboard Stop
+        </div>
+        <h2 class="cp-h">About Me</h2>
+        <div class="about-row">
+          <div class="avatar">AC</div>
+          <div>
+            <div class="about-name">Alex Chen</div>
+            <div class="about-title">Creative Developer</div>
+            <p class="cp-body" style="margin: 0">
+              "Crafting digital experiences that inspire"
+            </p>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <p class="cp-body">
+          Full-stack developer with 5+ years of experience building immersive
+          web experiences. Passionate about the intersection of design and
+          technology — where code becomes art and interfaces tell stories worth
+          remembering.
+        </p>
+        <div class="tags">
+          <span class="tag">WebGL</span><span class="tag">Three.js</span
+          ><span class="tag">React</span> <span class="tag">Node.js</span
+          ><span class="tag">Python</span><span class="tag">Open Source</span>
+        </div>
+        <div class="divider"></div>
+        <button class="btn-cont" onclick="closeCP('cp1')">
+          CONTINUE JOURNEY &nbsp;→
+        </button>
+      </div>
+    </div>
+
+    <!-- CP2 · SKILLS -->
+    <div id="cp2" class="cp-overlay">
+      <div class="cp-panel">
+        <div class="ghost-num">02</div>
+        <button class="btn-close" onclick="closeCP('cp2')">ESC / CLOSE</button>
+        <div class="sec-label">
+          // Checkpoint 02 &nbsp;—&nbsp; Garage Workshop
+        </div>
+        <h2 class="cp-h">Skills</h2>
+        <div class="skills-grid" id="skills-grid">
+          <div class="skill-cat">
+            <h3>Frontend</h3>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>JavaScript</span><span>95%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="95"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row"><span>React</span><span>90%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="90"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>Three.js / WebGL</span><span>85%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="85"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>CSS / Animation</span><span>92%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="92"></div>
+              </div>
+            </div>
+          </div>
+          <div class="skill-cat">
+            <h3>Backend</h3>
+            <div class="skill-item">
+              <div class="skill-row"><span>Node.js</span><span>88%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="88"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row"><span>Python</span><span>82%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="82"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>PostgreSQL</span><span>78%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="78"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row"><span>GraphQL</span><span>75%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="75"></div>
+              </div>
+            </div>
+          </div>
+          <div class="skill-cat">
+            <h3>Tools</h3>
+            <div class="skill-item">
+              <div class="skill-row"><span>Git</span><span>95%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="95"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row"><span>Docker</span><span>80%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="80"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row"><span>Figma</span><span>85%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="85"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row"><span>Blender</span><span>65%</span></div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="65"></div>
+              </div>
+            </div>
+          </div>
+          <div class="skill-cat">
+            <h3>Soft Skills</h3>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>Leadership</span><span>90%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="90"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>Problem Solving</span><span>95%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="95"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>Communication</span><span>88%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="88"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-row">
+                <span>Creativity</span><span>98%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-bar" data-w="98"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-cont" onclick="closeCP('cp2')">
+          CONTINUE JOURNEY &nbsp;→
+        </button>
+      </div>
+    </div>
+
+    <!-- CP3 · PROJECTS -->
+    <div id="cp3" class="cp-overlay">
+      <div class="cp-panel">
+        <div class="ghost-num">03</div>
+        <button class="btn-close" onclick="closeCP('cp3')">ESC / CLOSE</button>
+        <div class="sec-label">
+          // Checkpoint 03 &nbsp;—&nbsp; Hologram Display
+        </div>
+        <h2 class="cp-h">Projects</h2>
+        <div class="proj-grid">
+          <div class="proj-card">
+            <div class="proj-num">// 001</div>
+            <div class="proj-name">Neural Visualizer</div>
+            <div class="proj-desc">
+              AI-powered data visualization tool with real-time neural network
+              graph rendering and interactive model exploration.
+            </div>
+            <div class="tech-row">
+              <span class="tech">WebGL</span><span class="tech">Python</span
+              ><span class="tech">TensorFlow</span>
+            </div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-num">// 002</div>
+            <div class="proj-name">Cyber Commerce</div>
+            <div class="proj-desc">
+              E-commerce platform with immersive 3D product views, AR try-on
+              capabilities, and a dynamic pricing engine.
+            </div>
+            <div class="tech-row">
+              <span class="tech">Three.js</span><span class="tech">React</span
+              ><span class="tech">Node.js</span>
+            </div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-num">// 003</div>
+            <div class="proj-name">Synthwave Radio</div>
+            <div class="proj-desc">
+              Streaming music app with audio-reactive 3D visualizations,
+              real-time frequency analysis, and social listening rooms.
+            </div>
+            <div class="tech-row">
+              <span class="tech">Web Audio</span
+              ><span class="tech">Three.js</span
+              ><span class="tech">Socket.io</span>
+            </div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-num">// 004</div>
+            <div class="proj-name">Portfolio Engine</div>
+            <div class="proj-desc">
+              Headless CMS for creative portfolios — enabling scroll-driven
+              cinematic experiences with a visual drag-and-drop editor.
+            </div>
+            <div class="tech-row">
+              <span class="tech">Next.js</span><span class="tech">GraphQL</span
+              ><span class="tech">Docker</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-cont" onclick="closeCP('cp3')">
+          CONTINUE JOURNEY &nbsp;→
+        </button>
+      </div>
+    </div>
+
+    <!-- CP4 · EXPERIENCE -->
+    <div id="cp4" class="cp-overlay">
+      <div class="cp-panel">
+        <div class="ghost-num">04</div>
+        <button class="btn-close" onclick="closeCP('cp4')">ESC / CLOSE</button>
+        <div class="sec-label">// Checkpoint 04 &nbsp;—&nbsp; Data Highway</div>
+        <h2 class="cp-h">Experience</h2>
+        <div class="timeline" id="tl">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2024 — PRESENT</div>
+            <div class="tl-role">Senior Developer</div>
+            <div class="tl-company">TechCorp</div>
+            <div class="tl-desc">
+              Led a team of 5 engineers building next-generation web
+              applications. Architected microservices infrastructure reducing
+              load times by 60% and mentored junior developers.
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2022 — 2024</div>
+            <div class="tl-role">Full Stack Developer</div>
+            <div class="tl-company">StartupXYZ</div>
+            <div class="tl-desc">
+              Built the entire MVP from scratch in 3 months. Scaled the platform
+              from 0 to 50,000 active users. Implemented real-time collaboration
+              features using WebSockets.
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2020 — 2022</div>
+            <div class="tl-role">Junior Developer</div>
+            <div class="tl-company">Agency123</div>
+            <div class="tl-desc">
+              Delivered 20+ web projects for clients across finance, retail, and
+              entertainment. Specialized in interactive and animated experiences
+              that won 3 industry awards.
+            </div>
+          </div>
+          <div class="tl-item">
+            <div
+              class="tl-dot"
+              style="
+                background: var(--accent);
+                box-shadow: 0 0 12px var(--accent);
+              "
+            ></div>
+            <div class="tl-year">2019 — 2020</div>
+            <div class="tl-role">Freelance Developer</div>
+            <div class="tl-company">Self-Employed</div>
+            <div class="tl-desc">
+              The self-taught journey began. Built 10+ client projects while
+              mastering modern web technologies. The road that led to everything
+              else.
+            </div>
+          </div>
+        </div>
+        <button class="btn-cont" onclick="closeCP('cp4')">
+          CONTINUE JOURNEY &nbsp;→
+        </button>
+      </div>
+    </div>
+
+    <!-- CP5 · CONTACT -->
+    <div id="cp5" class="cp-overlay">
+      <div class="cp-panel">
+        <div class="ghost-num">05</div>
+        <button class="btn-close" onclick="closeCP('cp5')">ESC / CLOSE</button>
+        <div class="sec-label">
+          // Checkpoint 05 &nbsp;—&nbsp; Terminal Station
+        </div>
+        <h2 class="cp-h">Let's Connect</h2>
+        <p class="cp-body">
+          Journey complete. You've reached the terminal. Let's build something
+          extraordinary together — a collaboration that pushes the edges of the
+          possible.
+        </p>
+        <div class="divider"></div>
+        <div class="contact-grid">
+          <div class="contact-card" onclick="copyEmail()">
+            <div class="c-icon">✉</div>
+            <div>
+              <span class="c-label">Email</span
+              ><span class="c-val">alex@example.com</span>
+            </div>
+          </div>
+          <div
+            class="contact-card"
+            onclick="openLink('https://github.com/alexchen')"
+          >
+            <div
+              class="c-icon"
+              style="
+                font-size: 12px;
+                font-family: &quot;Orbitron&quot;, monospace;
+              "
+            >
+              GH
+            </div>
+            <div>
+              <span class="c-label">GitHub</span
+              ><span class="c-val">github.com/alexchen</span>
+            </div>
+          </div>
+          <div
+            class="contact-card"
+            onclick="openLink('https://linkedin.com/in/alexchen')"
+          >
+            <div
+              class="c-icon"
+              style="
+                font-size: 13px;
+                font-family: &quot;Orbitron&quot;, monospace;
+                font-weight: 900;
+              "
+            >
+              in
+            </div>
+            <div>
+              <span class="c-label">LinkedIn</span
+              ><span class="c-val">linkedin.com/in/alexchen</span>
+            </div>
+          </div>
+          <div
+            class="contact-card"
+            onclick="openLink('https://twitter.com/alexchendev')"
+          >
+            <div class="c-icon" style="font-size: 14px">✕</div>
+            <div>
+              <span class="c-label">Twitter / X</span
+              ><span class="c-val">@alexchendev</span>
+            </div>
+          </div>
+        </div>
+        <span id="copy-msg">✓ EMAIL COPIED TO CLIPBOARD</span>
+        <button class="btn-cont" onclick="restartJourney()">
+          ← &nbsp;RESTART JOURNEY
+        </button>
+      </div>
+    </div>
+
+    <!-- ─────────── SCRIPTS ─────────── -->
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
     <script>
-        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+      // ═══════════════════════════════════════════
+      // CONFIG
+      // ═══════════════════════════════════════════
+      const MAX_SCROLL = 50000;
+      const CHECKPOINTS = [
+        { id: "cp1", prog: 0.16, label: "// ABOUT" },
+        { id: "cp2", prog: 0.36, label: "// SKILLS" },
+        { id: "cp3", prog: 0.56, label: "// PROJECTS" },
+        { id: "cp4", prog: 0.76, label: "// EXPERIENCE" },
+        { id: "cp5", prog: 0.9, label: "// CONTACT" },
+      ];
+      const CP_TOL = 0.022; // trigger tolerance
 
-        let scene, camera, renderer, car;
-        let roadLines, particles = [];
-        let scrollProgress = 0;
-        let targetScrollProgress = 0;
-        let velocity = 0;
-        const damping = 0.92;
-        const lerpFactor = 0.08;
-        let isAtCheckpoint = false;
-        let currentCheckpoint = null;
-        const checkpointPositions = [8000, 18000, 28000, 38000, 45000];
-        const totalScrollHeight = 50000;
+      // ═══════════════════════════════════════════
+      // STATE
+      // ═══════════════════════════════════════════
+      let scrollY = 0,
+        lastScrollY = 0,
+        scrollProg = 0;
+      let rawVel = 0,
+        vel = 0,
+        roadSpeed = 0;
+      let roadOffset = 0;
+      let isOpen = false,
+        activeCPId = null;
+      let cpCooldowns = {}; // id → timestamp
+      let time = 0;
 
-        function init() {
-            scene = new THREE.Scene();
-            scene.fog = new THREE.Fog(0x0f0c29, 100, 500);
+      // ═══════════════════════════════════════════
+      // THREE.JS SETUP
+      // ═══════════════════════════════════════════
+      const canvas3 = document.getElementById("three-canvas");
+      const renderer = new THREE.WebGLRenderer({
+        canvas: canvas3,
+        antialias: true,
+        alpha: true,
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.shadowMap.enabled = true;
 
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 50, 150);
-            camera.lookAt(0, 0, -200);
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x0a0818, 0.0115);
 
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setClearColor(0x0f0c29, 1);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
+      const camera = new THREE.PerspectiveCamera(
+        68,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        800,
+      );
+      camera.position.set(0, 3.4, 11);
+      camera.lookAt(0, 1.6, -80);
 
-            createRoad();
-            createCar();
-            createEnvironment();
-            createParticles();
-            createLighting();
+      // ── Lights ──
+      scene.add(new THREE.AmbientLight(0x0e0c28, 4));
+      const sunLight = new THREE.DirectionalLight(0xffaa66, 1.8);
+      sunLight.position.set(15, 25, -20);
+      sunLight.castShadow = true;
+      scene.add(sunLight);
+      const pinkPt = new THREE.PointLight(0xff2e63, 6, 28);
+      pinkPt.position.set(-5, 0.8, 6);
+      scene.add(pinkPt);
+      const cyanPt = new THREE.PointLight(0x08f7fe, 6, 28);
+      cyanPt.position.set(5, 0.8, 6);
+      scene.add(cyanPt);
+      const headPt = new THREE.PointLight(0x00fff5, 10, 22);
+      headPt.position.set(0, 2.5, 7);
+      scene.add(headPt);
 
-            window.addEventListener('resize', onWindowResize);
+      // ── Materials ──
+      function mat(col, emissive, emInt = 0, rough = 0.8, metal = 0) {
+        return new THREE.MeshStandardMaterial({
+          color: col,
+          emissive: emissive || col,
+          emissiveIntensity: emInt,
+          roughness: rough,
+          metalness: metal,
+        });
+      }
 
-            setupScrollTrigger();
-            animate();
+      // ── Road ──
+      const road = new THREE.Mesh(
+        new THREE.PlaneGeometry(13, 600),
+        mat(0x10101f, null, 0),
+      );
+      road.rotation.x = -Math.PI / 2;
+      road.position.set(0, -0.01, -290);
+      scene.add(road);
+      [-8.5, 8.5].forEach((x, i) => {
+        const s = new THREE.Mesh(
+          new THREE.PlaneGeometry(4, 600),
+          mat(0x080810, null, 0),
+        );
+        s.rotation.x = -Math.PI / 2;
+        s.position.set(x * 1.15, -0.02, -290);
+        scene.add(s);
+      });
+      // Ground
+      const ground = new THREE.Mesh(
+        new THREE.PlaneGeometry(2000, 2000),
+        mat(0x04040e, null, 0, 1),
+      );
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = -0.06;
+      scene.add(ground);
+      // Edge neon lines
+      [
+        [-6.4, 0xff2e63],
+        [6.4, 0x08f7fe],
+      ].forEach(([x, col]) => {
+        const e = new THREE.Mesh(
+          new THREE.BoxGeometry(0.07, 0.05, 600),
+          mat(col, col, 3, 0, 1),
+        );
+        e.position.set(x, 0.02, -290);
+        scene.add(e);
+      });
+      // Horizon road fade plane (dark strip at vanishing point)
+      const hfade = new THREE.Mesh(
+        new THREE.PlaneGeometry(13, 40),
+        mat(0x060614, null, 0),
+      );
+      hfade.rotation.x = -Math.PI / 2;
+      hfade.position.set(0, 0.005, -590);
+      scene.add(hfade);
+
+      // ── Lane Markings (treadmill) ──
+      const MARK_SPACE = 9,
+        MARK_COUNT = 40;
+      const MARK_RANGE = MARK_SPACE * MARK_COUNT;
+      const markings = [];
+      const mkGeo = new THREE.BoxGeometry(0.14, 0.025, 4.2);
+      const mkMat = mat(0xffffff, 0xffffff, 0.5, 0.6);
+      for (let i = 0; i < MARK_COUNT; i++) {
+        const m = new THREE.Mesh(mkGeo, mkMat);
+        m.position.set(0, 0.025, -i * MARK_SPACE);
+        scene.add(m);
+        markings.push(m);
+      }
+
+      // ── Road Poles / Street Lights (treadmill) ──
+      const POLE_SPACE = 14,
+        POLE_COUNT = 30;
+      const POLE_RANGE = POLE_SPACE * POLE_COUNT;
+      const poles = [];
+      const poleMat0 = mat(0x1c1c2e, null, 0, 0.9);
+      const poleMatPink = mat(0xff2e63, 0xff2e63, 3, 0, 1);
+      const poleMatCyan = mat(0x08f7fe, 0x08f7fe, 3, 0, 1);
+      for (let i = 0; i < POLE_COUNT; i++) {
+        const pg = new THREE.Group();
+        const pole = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.07, 0.07, 6, 8),
+          poleMat0,
+        );
+        pole.position.y = 3;
+        pg.add(pole);
+        const side = i % 2 === 0 ? -1 : 1;
+        const arm = new THREE.Mesh(
+          new THREE.BoxGeometry(1.8, 0.08, 0.08),
+          poleMat0,
+        );
+        arm.position.set(side * 0.9, 6.1, 0);
+        pg.add(arm);
+        const bulb = new THREE.Mesh(
+          new THREE.BoxGeometry(0.28, 0.16, 0.28),
+          i % 2 === 0 ? poleMatPink : poleMatCyan,
+        );
+        bulb.position.set(side * 1.75, 5.95, 0);
+        pg.add(bulb);
+        const xp = side < 0 ? -7.8 : 7.8;
+        pg.position.set(xp, 0, -i * POLE_SPACE);
+        pg.userData.base = -i * POLE_SPACE;
+        scene.add(pg);
+        poles.push(pg);
+      }
+
+      // ── City Buildings ──
+      const buildings = [];
+      const bMats = [
+        mat(0x0c0c1f, 0x111133, 0.4, 0.9),
+        mat(0x090914, 0x0d0d28, 0.35, 0.9),
+      ];
+      const winColors = [0xff2e63, 0x08f7fe, 0xe91e8c, 0xffdd00, 0x00ff88];
+      for (let i = 0; i < 60; i++) {
+        const w = Math.random() * 3 + 0.8,
+          h = Math.random() * 22 + 5,
+          d = Math.random() * 3 + 0.8;
+        const bm = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), bMats[i % 2]);
+        const side = Math.random() < 0.5 ? -1 : 1;
+        const xd = 12 + Math.random() * 45,
+          z = -Math.random() * 350 - 15;
+        bm.position.set(side * xd, h / 2, z);
+        bm.userData.bz = z;
+        scene.add(bm);
+        buildings.push(bm);
+        // Window glow strips
+        if (Math.random() > 0.45) {
+          const wc = winColors[Math.floor(Math.random() * winColors.length)];
+          const wm = mat(wc, wc, 1.5, 0, 0.8);
+          for (let j = 0; j < Math.floor(Math.random() * 4) + 1; j++) {
+            const wg = new THREE.Mesh(
+              new THREE.BoxGeometry(w + 0.05, 0.06, d + 0.05),
+              wm,
+            );
+            wg.position.set(side * xd, h * (0.25 + j * 0.18), z + 0.01);
+            wg.userData.bz = z;
+            scene.add(wg);
+            buildings.push(wg);
+          }
         }
+      }
 
-        function createRoad() {
-            const roadGeometry = new THREE.PlaneGeometry(80, 2000);
-            const roadMaterial = new THREE.MeshBasicMaterial({
-                color: 0x1a1a2e,
-                side: THREE.DoubleSide
+      // ── Mountains (distant silhouettes) ──
+      const mtns = new THREE.Group();
+      const mtnMat = mat(0x060618, 0x0a0a25, 0.2, 1);
+      function addMtn(x, z, rx, ry) {
+        const shape = new THREE.Shape();
+        shape.moveTo(-rx, 0);
+        shape.lineTo(0, ry);
+        shape.lineTo(rx, 0);
+        shape.closePath();
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: 14,
+          bevelEnabled: false,
+        });
+        const m = new THREE.Mesh(geo, mtnMat);
+        m.position.set(x, 0, z);
+        mtns.add(m);
+      }
+      [
+        [-55, -260, 40, 38],
+        [-10, -280, 55, 60],
+        [35, -268, 45, 50],
+        [85, -255, 35, 30],
+        [-95, -270, 50, 45],
+        [120, -275, 42, 52],
+        [-130, -260, 60, 35],
+        [155, -280, 38, 42],
+      ].forEach((a) => addMtn(...a));
+      scene.add(mtns);
+
+      // ── Neon Signs along road ──
+      const signs = [];
+      const signTexts = [
+        ["DREAM", 0xff2e63],
+        ["CODE", 0x08f7fe],
+        ["CREATE", 0xe91e8c],
+        ["BUILD", 0x00ff88],
+      ];
+      signTexts.forEach(([txt, col], i) => {
+        const sg = new THREE.Group();
+        // Frame
+        const frame = new THREE.Mesh(
+          new THREE.BoxGeometry(5, 2, 0.15),
+          mat(0x111122, null, 0, 0.8),
+        );
+        sg.add(frame);
+        // Glow strip
+        const glow = new THREE.Mesh(
+          new THREE.BoxGeometry(5.1, 2.1, 0.05),
+          mat(col, col, 2, 0, 1),
+        );
+        glow.position.z = -0.06;
+        sg.add(glow);
+        const side = i % 2 === 0 ? -1 : 1;
+        sg.position.set(side * 11, 5, -60 - i * 60);
+        sg.rotation.y = side * Math.PI * 0.08;
+        sg.userData.base = -60 - i * 60;
+        scene.add(sg);
+        signs.push(sg);
+      });
+
+      // ── Car Model ──
+      const car = new THREE.Group();
+      const carBMat = mat(0x13132a, null, 0, 0.25, 0.9);
+      const carGMat = mat(0x0a0a1e, null, 0, 0.1, 0.98);
+      // Body
+      const body = new THREE.Mesh(
+        new THREE.BoxGeometry(2.2, 0.52, 4.6),
+        carBMat,
+      );
+      body.position.y = 0.54;
+      car.add(body);
+      // Front hood slope
+      const hood = new THREE.Mesh(
+        new THREE.BoxGeometry(2.1, 0.25, 1.2),
+        carGMat,
+      );
+      hood.position.set(0, 0.93, 1.5);
+      hood.rotation.x = -0.18;
+      car.add(hood);
+      // Cabin
+      const cabin = new THREE.Mesh(
+        new THREE.BoxGeometry(1.82, 0.62, 2.1),
+        carGMat,
+      );
+      cabin.position.set(0, 1.1, -0.1);
+      car.add(cabin);
+      // Rear trunk
+      const trunk = new THREE.Mesh(
+        new THREE.BoxGeometry(2.0, 0.2, 0.8),
+        carBMat,
+      );
+      trunk.position.set(0, 0.85, -2.2);
+      trunk.rotation.x = 0.12;
+      car.add(trunk);
+      // Bumpers
+      [2.2, -2.2].forEach((z) => {
+        const b = new THREE.Mesh(
+          new THREE.BoxGeometry(2.0, 0.22, 0.28),
+          carBMat,
+        );
+        b.position.set(0, 0.44, z);
+        car.add(b);
+      });
+      // Side skirts
+      [-1.12, 1.12].forEach((x) => {
+        const sk = new THREE.Mesh(
+          new THREE.BoxGeometry(0.12, 0.18, 4.4),
+          carBMat,
+        );
+        sk.position.set(x, 0.22, 0);
+        car.add(sk);
+      });
+      // Wheels
+      const wGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.28, 20);
+      const wMat = mat(0x111111, null, 0, 0.95);
+      const rMat = mat(0x888899, null, 0, 0.15, 0.95);
+      const wheelPos = [
+        [-1.18, 0.42, 1.5],
+        [1.18, 0.42, 1.5],
+        [-1.18, 0.42, -1.5],
+        [1.18, 0.42, -1.5],
+      ];
+      const wheels = [];
+      wheelPos.forEach((p) => {
+        const wg = new THREE.Group();
+        const tire = new THREE.Mesh(wGeo, wMat);
+        tire.rotation.z = Math.PI / 2;
+        wg.add(tire);
+        const rim = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.26, 0.26, 0.3, 8),
+          rMat,
+        );
+        rim.rotation.z = Math.PI / 2;
+        wg.add(rim);
+        wg.position.set(...p);
+        car.add(wg);
+        wheels.push(wg);
+      });
+      // Headlights (cyan)
+      const hlMat = mat(0x00fff5, 0x00fff5, 5, 0, 1);
+      [-0.72, 0.72].forEach((x) => {
+        const hl = new THREE.Mesh(
+          new THREE.BoxGeometry(0.38, 0.11, 0.04),
+          hlMat,
+        );
+        hl.position.set(x, 0.72, 2.32);
+        car.add(hl);
+      });
+      // Taillights (pink)
+      const tlMat = mat(0xff2e63, 0xff2e63, 5, 0, 1);
+      [-0.72, 0.72].forEach((x) => {
+        const tl = new THREE.Mesh(
+          new THREE.BoxGeometry(0.38, 0.11, 0.04),
+          tlMat,
+        );
+        tl.position.set(x, 0.72, -2.33);
+        car.add(tl);
+      });
+      // Underbody glow
+      const ugMat = mat(0xe91e8c, 0xe91e8c, 2.5, 0, 1);
+      const ug = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.04, 4.2), ugMat);
+      ug.position.set(0, 0.16, 0);
+      car.add(ug);
+      // Exhaust
+      [-0.45, 0.45].forEach((x) => {
+        const ex = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.07, 0.09, 0.25, 10),
+          mat(0x333355, null, 0, 0.5, 0.9),
+        );
+        ex.rotation.x = Math.PI / 2;
+        ex.position.set(x, 0.35, -2.42);
+        car.add(ex);
+      });
+      car.position.set(0, 0, 6.5);
+      scene.add(car);
+
+      // ═══════════════════════════════════════════
+      // PARTICLES (2D canvas)
+      // ═══════════════════════════════════════════
+      const pCanvas = document.getElementById("particles-canvas");
+      const pCtx = pCanvas.getContext("2d");
+      function resizeP() {
+        pCanvas.width = window.innerWidth;
+        pCanvas.height = window.innerHeight;
+      }
+      resizeP();
+
+      class Particle {
+        constructor() {
+          this.reset(true);
+        }
+        reset(init = false) {
+          this.x = Math.random() * pCanvas.width;
+          this.y = init ? Math.random() * pCanvas.height : pCanvas.height + 5;
+          this.vx = (Math.random() - 0.5) * 0.6;
+          this.vy = -(Math.random() * 1.4 + 0.3);
+          this.r = Math.random() * 1.8 + 0.4;
+          this.alpha = Math.random() * 0.45 + 0.1;
+          this.col = Math.random() < 0.5 ? "#08f7fe" : "#ff2e63";
+          this.life = 1;
+          this.decay = Math.random() * 0.004 + 0.002;
+        }
+        update(spd) {
+          const m = 1 + Math.abs(spd) * 0.06;
+          this.x += this.vx * m;
+          this.y += this.vy * m;
+          this.life -= this.decay;
+          if (
+            this.life <= 0 ||
+            this.y < -8 ||
+            this.x < -8 ||
+            this.x > pCanvas.width + 8
+          )
+            this.reset();
+        }
+        draw(ctx) {
+          ctx.save();
+          ctx.globalAlpha = this.alpha * this.life;
+          ctx.fillStyle = this.col;
+          ctx.shadowColor = this.col;
+          ctx.shadowBlur = 7;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+      const ptcls = Array.from({ length: 130 }, () => new Particle());
+
+      // ═══════════════════════════════════════════
+      // STARS (2D canvas)
+      // ═══════════════════════════════════════════
+      const sCanvas = document.getElementById("stars-canvas");
+      const sCtx = sCanvas.getContext("2d");
+      function resizeS() {
+        sCanvas.width = window.innerWidth;
+        sCanvas.height = window.innerHeight;
+      }
+      resizeS();
+      const stars = Array.from({ length: 220 }, () => ({
+        x: Math.random() * sCanvas.width,
+        y: Math.random() * sCanvas.height * 0.65,
+        r: Math.random() * 1.4 + 0.2,
+        phase: Math.random() * Math.PI * 2,
+      }));
+      function drawStars() {
+        sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
+        stars.forEach((s) => {
+          s.phase += 0.018;
+          const a = 0.35 + 0.45 * Math.sin(s.phase);
+          sCtx.save();
+          sCtx.globalAlpha = a;
+          sCtx.fillStyle = "#fff";
+          sCtx.shadowColor = "#cce8ff";
+          sCtx.shadowBlur = 5;
+          sCtx.beginPath();
+          sCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          sCtx.fill();
+          sCtx.restore();
+        });
+      }
+
+      // ═══════════════════════════════════════════
+      // SKY
+      // ═══════════════════════════════════════════
+      const skyEl = document.getElementById("sky-bg");
+      function lerpC(a, b, t) {
+        return a.map((v, i) => Math.round(v + (b[i] - v) * Math.min(1, t)));
+      }
+      function updateSky(p) {
+        const top = lerpC([15, 12, 41], [0, 0, 8], p * 1.6);
+        const mid = lerpC([48, 43, 99], [5, 5, 18], p * 1.4);
+        const hrz = lerpC([255, 107, 53], [18, 0, 45], p * 1.5);
+        const low = lerpC([255, 154, 92], [10, 0, 30], p * 1.5);
+        skyEl.style.background = `linear-gradient(to bottom,
+    rgb(${top}) 0%, rgb(${mid}) 38%,
+    #4a1a5e ${50 + p * 12}%, rgb(${hrz}) 76%,
+    rgb(${low}) ${90 - p * 18}%)`;
+        sCanvas.style.opacity = Math.max(0, (p - 0.38) * 2.2);
+        const fogC = new THREE.Color(0x0a0818).lerp(
+          new THREE.Color(0x000005),
+          p,
+        );
+        scene.fog.color = fogC;
+        scene.fog.density = 0.012 + p * 0.009;
+      }
+
+      // ═══════════════════════════════════════════
+      // SCROLL
+      // ═══════════════════════════════════════════
+      document.getElementById("scroll-space").style.height =
+        MAX_SCROLL + window.innerHeight + "px";
+      window.addEventListener("scroll", () => {
+        const ny = window.scrollY;
+        rawVel = ny - lastScrollY;
+        lastScrollY = ny;
+        scrollY = ny;
+        scrollProg = Math.min(1, scrollY / MAX_SCROLL);
+      });
+
+      // ═══════════════════════════════════════════
+      // CHECKPOINT SYSTEM
+      // ═══════════════════════════════════════════
+      function openCP(id) {
+        if (isOpen) return;
+        isOpen = true;
+        activeCPId = id;
+        const el = document.getElementById(id);
+        el.classList.add("active");
+        if (id === "cp2") {
+          setTimeout(() => {
+            document.querySelectorAll(".skill-bar").forEach((b) => {
+              b.style.width = b.dataset.w + "%";
             });
-            const road = new THREE.Mesh(roadGeometry, roadMaterial);
-            road.rotation.x = -Math.PI / 2;
-            road.position.y = -20;
-            road.position.z = -800;
-            scene.add(road);
-
-            const lineGeometry = new THREE.PlaneGeometry(2, 2000);
-            const lineMaterial = new THREE.MeshBasicMaterial({
-                color: 0xff2e63,
-                transparent: true,
-                opacity: 0.8
-            });
-
-            const centerLine = new THREE.Mesh(lineGeometry, lineMaterial);
-            centerLine.rotation.x = -Math.PI / 2;
-            centerLine.position.y = -19;
-            centerLine.position.z = -800;
-            scene.add(centerLine);
-
-            const edgeGeometry = new THREE.PlaneGeometry(1, 2000);
-            const edgeMaterial = new THREE.MeshBasicMaterial({
-                color: 0x08f7fe,
-                transparent: true,
-                opacity: 0.6
-            });
-
-            const leftEdge = new THREE.Mesh(edgeGeometry, edgeMaterial);
-            leftEdge.rotation.x = -Math.PI / 2;
-            leftEdge.position.set(-40, -19, -800);
-            scene.add(leftEdge);
-
-            const rightEdge = new THREE.Mesh(edgeGeometry, edgeMaterial.clone());
-            rightEdge.position.set(40, -19, -800);
-            scene.add(rightEdge);
-
-            roadLines = { centerLine, leftEdge, rightEdge };
+          }, 350);
         }
-
-        function createCar() {
-            const carGroup = new THREE.Group();
-
-            const bodyGeometry = new THREE.BoxGeometry(12, 4, 20);
-            const bodyMaterial = new THREE.MeshPhongMaterial({
-                color: 0x1a1a2e,
-                emissive: 0xff2e63,
-                emissiveIntensity: 0.1,
-                shininess: 100
-            });
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-            body.position.y = 2;
-            carGroup.add(body);
-
-            const topGeometry = new THREE.BoxGeometry(10, 3, 10);
-            const topMaterial = new THREE.MeshPhongMaterial({
-                color: 0x302b63,
-                transparent: true,
-                opacity: 0.7,
-                shininess: 100
-            });
-            const top = new THREE.Mesh(topGeometry, topMaterial);
-            top.position.y = 5.5;
-            top.position.z = -2;
-            carGroup.add(top);
-
-            const wheelGeometry = new THREE.CylinderGeometry(2, 2, 1.5, 16);
-            const wheelMaterial = new THREE.MeshPhongMaterial({
-                color: 0x0f0c29,
-                emissive: 0x08f7fe,
-                emissiveIntensity: 0.2
-            });
-
-            const wheelPositions = [
-                { x: -6, z: 6 }, { x: 6, z: 6 },
-                { x: -6, z: -6 }, { x: 6, z: -6 }
-            ];
-
-            wheelPositions.forEach(pos => {
-                const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-                wheel.rotation.z = Math.PI / 2;
-                wheel.position.set(pos.x, -1, pos.z);
-                carGroup.add(wheel);
-            });
-
-            const headlightGeometry = new THREE.BoxGeometry(2, 1, 0.5);
-            const headlightMaterial = new THREE.MeshBasicMaterial({
-                color: 0x08f7fe,
-                transparent: true,
-                opacity: 0.9
-            });
-
-            const leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
-            leftHeadlight.position.set(-4, 1, 10);
-            carGroup.add(leftHeadlight);
-
-            const rightHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial.clone());
-            rightHeadlight.position.set(4, 1, 10);
-            carGroup.add(rightHeadlight);
-
-            const taillightMaterial = new THREE.MeshBasicMaterial({
-                color: 0xff2e63,
-                transparent: true,
-                opacity: 0.9
-            });
-
-            const leftTaillight = new THREE.Mesh(headlightGeometry.clone(), taillightMaterial);
-            leftTaillight.position.set(-4, 1, -10);
-            carGroup.add(leftTaillight);
-
-            const rightTaillight = new THREE.Mesh(headlightGeometry.clone(), taillightMaterial.clone());
-            rightTaillight.position.set(4, 1, -10);
-            carGroup.add(rightTaillight);
-
-            car = carGroup;
-            car.position.y = 0;
-            car.position.z = 0;
-            scene.add(car);
+        if (id === "cp4") {
+          document.querySelectorAll(".tl-item").forEach((item, i) => {
+            setTimeout(() => item.classList.add("in"), i * 180 + 320);
+          });
         }
-
-        function createEnvironment() {
-            createStars();
-            createMountains();
-            createCity();
+        const cp = CHECKPOINTS.find((c) => c.id === id);
+        if (cp) {
+          const t = document.getElementById("section-tag");
+          t.textContent = cp.label;
+          t.style.opacity = "1";
         }
+      }
+      window.closeCP = function (id) {
+        const el = document.getElementById(id);
+        el.classList.remove("active");
+        isOpen = false;
+        activeCPId = null;
+        cpCooldowns[id] = Date.now();
+        // Reset skill bars for re-animation
+        if (id === "cp2")
+          document
+            .querySelectorAll(".skill-bar")
+            .forEach((b) => (b.style.width = "0%"));
+        if (id === "cp4")
+          document
+            .querySelectorAll(".tl-item")
+            .forEach((item) => item.classList.remove("in"));
+      };
+      window.copyEmail = function () {
+        navigator.clipboard
+          .writeText("alex@example.com")
+          .then(() => {
+            const m = document.getElementById("copy-msg");
+            m.style.opacity = "1";
+            setTimeout(() => (m.style.opacity = "0"), 2600);
+          })
+          .catch(() => {
+            const m = document.getElementById("copy-msg");
+            m.textContent = "✓ EMAIL: alex@example.com";
+            m.style.opacity = "1";
+            setTimeout(() => (m.style.opacity = "0"), 3000);
+          });
+      };
+      window.openLink = function (u) {
+        window.open(u, "_blank");
+      };
+      window.restartJourney = function () {
+        window.closeCP("cp5");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && activeCPId) closeCP(activeCPId);
+      });
 
-        function createStars() {
-            const starsGeometry = new THREE.BufferGeometry();
-            const starPositions = [];
+      // ═══════════════════════════════════════════
+      // LERP
+      // ═══════════════════════════════════════════
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
 
-            for (let i = 0; i < 200; i++) {
-                const x = (Math.random() - 0.5) * 800;
-                const y = 100 + Math.random() * 150;
-                const z = -200 - Math.random() * 600;
-                starPositions.push(x, y, z);
-            }
+      // ═══════════════════════════════════════════
+      // RESIZE
+      // ═══════════════════════════════════════════
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        resizeP();
+        resizeS();
+      });
 
-            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+      // ═══════════════════════════════════════════
+      // ANIMATION LOOP
+      // ═══════════════════════════════════════════
+      function animate() {
+        requestAnimationFrame(animate);
+        time += 0.016;
 
-            const starsMaterial = new THREE.PointsMaterial({
-                color: 0xffffff,
-                size: 1,
-                transparent: true,
-                opacity: 0.8
-            });
+        // ── Velocity smoothing ──
+        vel = lerp(vel, rawVel * 0.8, 0.14);
+        vel *= 0.9;
+        rawVel *= 0.85;
 
-            const stars = new THREE.Points(starsGeometry, starsMaterial);
-            stars.name = 'stars';
-            scene.add(stars);
-        }
+        const absVel = Math.abs(vel);
+        roadSpeed = lerp(roadSpeed, absVel * 0.85, 0.07);
+        const dir = rawVel >= 0 ? 1 : -1;
+        roadOffset += dir * roadSpeed;
 
-        function createMountains() {
-            const mountainMaterial = new THREE.MeshBasicMaterial({
-                color: 0x1a1a3e,
-                transparent: true,
-                opacity: 0.9
-            });
-
-            for (let i = 0; i < 8; i++) {
-                const height = 30 + Math.random() * 50;
-                const width = 40 + Math.random() * 60;
-                const mountainGeometry = new THREE.ConeGeometry(width, height, 4);
-                const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
-                mountain.position.set(-200 + i * 60 + Math.random() * 20, -10, -200 - Math.random() * 100);
-                mountain.rotation.y = Math.random() * Math.PI;
-                scene.add(mountain);
-            }
-        }
-
-        function createCity() {
-            const buildingMaterial = new THREE.MeshBasicMaterial({
-                color: 0x12122a,
-                transparent: true,
-                opacity: 0.8
-            });
-
-            for (let i = 0; i < 15; i++) {
-                const height = 20 + Math.random() * 80;
-                const width = 10 + Math.random() * 20;
-                const buildingGeometry = new THREE.BoxGeometry(width, height, width);
-                const building = new THREE.Mesh(buildingGeometry, buildingMaterial.clone());
-                building.position.set(-150 + i * 25, height / 2 - 20, -150 - Math.random() * 50);
-                scene.add(building);
-
-                if (Math.random() > 0.5) {
-                    const windowGeometry = new THREE.PlaneGeometry(1, 1);
-                    const windowMaterial = new THREE.MeshBasicMaterial({
-                        color: Math.random() > 0.5 ? 0xff2e63 : 0x08f7fe,
-                        transparent: true,
-                        opacity: 0.6
-                    });
-
-                    for (let j = 0; j < 5; j++) {
-                        const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
-                        windowMesh.position.set(
-                            building.position.x + (Math.random() - 0.5) * width * 0.8,
-                            building.position.y + (Math.random() - 0.3) * height * 0.6,
-                            building.position.z + width / 2 + 0.1
-                        );
-                        scene.add(windowMesh);
-                    }
-                }
-            }
-        }
-
-        function createParticles() {
-            const particleGeometry = new THREE.SphereGeometry(0.3, 8, 8);
-            const particleMaterial = new THREE.MeshBasicMaterial({
-                color: 0x08f7fe,
-                transparent: true,
-                opacity: 0.6
-            });
-
-            for (let i = 0; i < 50; i++) {
-                const particle = new THREE.Mesh(particleGeometry, particleMaterial.clone());
-                particle.position.set(
-                    (Math.random() - 0.5) * 200,
-                    Math.random() * 100 - 20,
-                    -Math.random() * 400
-                );
-                particle.userData = {
-                    originalY: particle.position.y,
-                    speed: 0.5 + Math.random() * 1,
-                    offset: Math.random() * Math.PI * 2
-                };
-                particles.push(particle);
-                scene.add(particle);
-            }
-        }
-
-        function createLighting() {
-            const ambientLight = new THREE.AmbientLight(0x302b63, 0.5);
-            scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0xff6b35, 0.8);
-            directionalLight.position.set(0, 50, 100);
-            scene.add(directionalLight);
-
-            const pointLight1 = new THREE.PointLight(0xff2e63, 1, 200);
-            pointLight1.position.set(-30, 30, -50);
-            scene.add(pointLight1);
-
-            const pointLight2 = new THREE.PointLight(0x08f7fe, 1, 200);
-            pointLight2.position.set(30, 30, -50);
-            scene.add(pointLight2);
-        }
-
-        function setupScrollTrigger() {
-            ScrollTrigger.create({
-                trigger: "#scroll-container",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 0.5,
-                onUpdate: (self) => {
-                    targetScrollProgress = self.progress;
-                }
-            });
-
-            const checkpointThresholds = checkpointPositions.map(pos => pos / totalScrollHeight);
-
-            function checkCheckpoint() {
-                const progress = scrollProgress;
-                let activeIndex = 0;
-
-                for (let i = checkpointThresholds.length - 1; i >= 0; i--) {
-                    if (progress >= checkpointThresholds[i] - 0.08 && progress <= checkpointThresholds[i] + 0.08) {
-                        activeIndex = i + 1;
-                        break;
-                    }
-                }
-
-                if (activeIndex !== currentCheckpoint) {
-                    if (activeIndex > 0) {
-                        activateCheckpoint(activeIndex);
-                    } else {
-                        deactivateCheckpoint();
-                    }
-                }
-            }
-
-            gsap.to("#progress-fill", {
-                width: "100%",
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#scroll-container",
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: 0.5
-                }
-            });
-        }
-
-        function activateCheckpoint(index) {
-            if (currentCheckpoint === index) return;
-            currentCheckpoint = index;
-            isAtCheckpoint = true;
-
-            document.querySelectorAll('.checkpoint').forEach(cp => cp.classList.remove('active'));
-            const checkpoint = document.getElementById(`checkpoint-${index}`);
-            if (checkpoint) {
-                checkpoint.classList.add('active');
-                animateCheckpointContent(index);
-            }
-        }
-
-        function deactivateCheckpoint() {
-            isAtCheckpoint = false;
-            currentCheckpoint = null;
-            document.querySelectorAll('.checkpoint').forEach(cp => cp.classList.remove('active'));
-        }
-
-        function animateCheckpointContent(index) {
-            if (index === 2) {
-                setTimeout(() => {
-                    document.querySelectorAll('.skill-fill').forEach(bar => {
-                        const width = bar.dataset.width;
-                        bar.style.width = width + '%';
-                    });
-                }, 300);
-            }
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const scrollDelta = targetScrollProgress - scrollProgress;
-            velocity += scrollDelta * 0.8;
-            velocity *= damping;
-            scrollProgress += velocity * lerpFactor;
-
-            const scrollPx = scrollProgress * totalScrollHeight;
-            const speed = Math.abs(velocity) * 1000;
-            updateUI(speed, scrollPx);
-            checkCheckpoint();
-
-            const time = Date.now() * 0.001;
-
-            if (car) {
-                car.position.z = -scrollProgress * 100;
-                car.rotation.y = Math.sin(time * 2) * 0.02;
-                car.position.y = Math.sin(time * 3) * 0.5;
-            }
-
-            if (roadLines) {
-                const offset = (scrollPx % 80) / 80 * 80;
-                roadLines.centerLine.position.z = -800 + offset;
-                roadLines.leftEdge.position.z = -800 + offset;
-                roadLines.rightEdge.position.z = -800 + offset;
-            }
-
-            particles.forEach(particle => {
-                particle.position.y = particle.userData.originalY + Math.sin(time * particle.userData.speed + particle.userData.offset) * 5;
-                particle.position.x += Math.sin(time * 0.5) * 0.1;
-            });
-
-            const stars = scene.getObjectByName('stars');
-            if (stars) {
-                stars.material.opacity = Math.min(scrollProgress * 3, 1);
-            }
-
-            const progress = scrollProgress;
-            const r = Math.floor(15 + (255 - 15) * Math.max(0, 1 - progress * 2));
-            const g = Math.floor(12 + (107 - 12) * Math.max(0, 1 - progress * 2));
-            const b = Math.floor(41 + (53 - 41) * Math.max(0, 1 - progress * 2));
-            scene.fog.color.setRGB(r / 255, g / 255, b / 255);
-            renderer.setClearColor(`rgb(${r},${g},${b})`);
-
-            renderer.render(scene, camera);
-        }
-
-        function updateUI(speed, scrollPx) {
-            const progress = (scrollProgress * 100).toFixed(0);
-            document.getElementById('progress-text').textContent = `${progress}%`;
-
-            const displaySpeed = Math.round(speed);
-            document.getElementById('speed-value').textContent = displaySpeed;
-
-            const speedIndicator = document.getElementById('speed-indicator');
-            if (speed > 5) {
-                speedIndicator.style.opacity = '1';
-            } else {
-                speedIndicator.style.opacity = '0';
-            }
-
-            updateParallax(scrollPx);
-        }
-
-        function updateParallax(scrollPx) {
-            const skyLayer = document.getElementById('sky-layer');
-            const mountainsLayer = document.getElementById('mountains-layer');
-            const cityLayer = document.getElementById('city-layer');
-            const particlesLayer = document.getElementById('particles-layer');
-
-            if (skyLayer) skyLayer.style.transform = `translateY(${scrollPx * 0.0001}px)`;
-            if (mountainsLayer) mountainsLayer.style.transform = `translateY(${scrollPx * 0.0002}px)`;
-            if (cityLayer) cityLayer.style.transform = `translateY(${scrollPx * 0.0003}px)`;
-            if (particlesLayer) particlesLayer.style.transform = `translateY(${scrollPx * 0.0015}px)`;
-        }
-
-        function startJourney() {
-            const overlay = document.getElementById('intro-overlay');
-            overlay.classList.add('hidden');
-
-            gsap.to(window, {
-                scrollTo: 100,
-                duration: 1,
-                ease: "power2.inOut"
-            });
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const terminal = document.querySelector('.terminal-body');
-                const newLine = document.createElement('div');
-                newLine.className = 'terminal-line';
-                newLine.style.color = 'var(--accent-magenta)';
-                newLine.innerHTML = `> Copied: <span style="color: var(--text-primary);">${text}</span>`;
-                terminal.appendChild(newLine);
-            });
-        }
-
-        function initParticles() {
-            const particlesLayer = document.getElementById('particles-layer');
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 8 + 's';
-                particle.style.animationDuration = (6 + Math.random() * 4) + 's';
-                particlesLayer.appendChild(particle);
-            }
-        }
-
-        function initMountains() {
-            const mountainsLayer = document.getElementById('mountains-layer');
-            for (let i = 0; i < 8; i++) {
-                const mountain = document.createElement('div');
-                mountain.className = 'mountain';
-                mountain.style.left = (i * 12) + '%';
-                mountain.style.borderBottomColor = i % 2 === 0 ? '#1a1a3e' : '#12122a';
-                mountain.style.transform = `scale(${0.8 + Math.random() * 0.4})`;
-                mountainsLayer.appendChild(mountain);
-            }
-        }
-
-        function initCity() {
-            const cityLayer = document.getElementById('city-layer');
-            for (let i = 0; i < 12; i++) {
-                const building = document.createElement('div');
-                building.className = 'building';
-                building.style.left = (i * 8 + Math.random() * 4) + '%';
-                building.style.width = (20 + Math.random() * 30) + 'px';
-                building.style.height = (60 + Math.random() * 100) + 'px';
-                cityLayer.appendChild(building);
-            }
-        }
-
-        function initStars() {
-            const starsLayer = document.getElementById('stars-layer');
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = (Math.random() * 40) + '%';
-                star.style.animationDelay = Math.random() * 2 + 's';
-                starsLayer.appendChild(star);
-            }
-        }
-
-        window.addEventListener('load', () => {
-            initParticles();
-            initMountains();
-            initCity();
-            initStars();
-            init();
+        // ── Lane markings treadmill ──
+        markings.forEach((m, i) => {
+          let z = -i * MARK_SPACE + (roadOffset % MARK_RANGE);
+          while (z > 12) z -= MARK_RANGE;
+          while (z < 12 - MARK_RANGE) z += MARK_RANGE;
+          m.position.z = z;
         });
 
-        document.addEventListener('wheel', (e) => {
-            if (currentCheckpoint && Math.abs(e.deltaY) < 50) {
-                e.preventDefault();
+        // ── Poles treadmill ──
+        poles.forEach((p, i) => {
+          let z = p.userData.base + ((roadOffset * 0.13) % POLE_RANGE);
+          while (z > 12) z -= POLE_RANGE;
+          p.position.z = z;
+        });
+
+        // ── Signs parallax ──
+        signs.forEach((s) => {
+          s.position.z = s.userData.base + scrollProg * 40;
+        });
+
+        // ── Buildings parallax ──
+        buildings.forEach((b) => {
+          if (b.userData.bz !== undefined)
+            b.position.z = b.userData.bz + scrollProg * 55;
+        });
+        mtns.position.z = scrollProg * 18;
+
+        // ── Car animation ──
+        car.position.y =
+          Math.sin(time * 9) * 0.018 * (Math.min(roadSpeed, 5) * 0.15 + 0.6);
+        car.rotation.x = -vel * 0.0012;
+        car.rotation.z = -vel * 0.0008;
+        wheels.forEach((w) => {
+          w.rotation.x += roadSpeed * 0.06;
+        });
+
+        // ── Underbody glow pulse ──
+        const pulse = 0.5 + 0.5 * Math.sin(time * 2.5);
+        ugMat.emissiveIntensity = 1.8 + pulse * 1.2;
+
+        // ── Lights pulse ──
+        pinkPt.intensity = 4 + Math.sin(time * 2.8) * 2;
+        cyanPt.intensity = 4 + Math.sin(time * 2.8 + Math.PI) * 2;
+        headPt.intensity = 7 + Math.sin(time * 4) * 1.5;
+
+        // ── Camera drift ──
+        camera.position.x = Math.sin(time * 0.4) * 0.08;
+        camera.position.y =
+          3.4 + Math.sin(time * 1.8) * 0.04 * (roadSpeed * 0.04 + 0.7);
+        // Subtle camera shake at speed
+        if (roadSpeed > 3) {
+          camera.position.x +=
+            (Math.random() - 0.5) * 0.012 * Math.min(roadSpeed, 10);
+          camera.position.y +=
+            (Math.random() - 0.5) * 0.008 * Math.min(roadSpeed, 10);
+        }
+
+        // ── Sky ──
+        updateSky(scrollProg);
+
+        // ── Stars ──
+        drawStars();
+
+        // ── Particles ──
+        pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+        ptcls.forEach((p) => {
+          p.update(vel);
+          p.draw(pCtx);
+        });
+
+        // ── Checkpoint detection ──
+        if (!isOpen) {
+          const now = Date.now();
+          CHECKPOINTS.forEach((cp) => {
+            const dist = Math.abs(scrollProg - cp.prog);
+            const cooldown = cpCooldowns[cp.id] || 0;
+            if (dist < CP_TOL && now - cooldown > 4500) {
+              cpCooldowns[cp.id] = now;
+              setTimeout(() => openCP(cp.id), 350);
             }
-        }, { passive: false });
+          });
+        }
+
+        // ── Hero fade ──
+        const hf = Math.max(0, 1 - scrollProg * 22);
+        document.getElementById("hero").style.opacity = hf;
+        document.getElementById("scroll-hint").style.opacity = hf;
+
+        // ── Progress bar ──
+        document.getElementById("prog-fill").style.height =
+          scrollProg * 100 + "%";
+
+        // ── Speed display ──
+        document.getElementById("spd").textContent = String(
+          Math.min(Math.round(absVel * 10), 999),
+        ).padStart(3, "0");
+
+        // ── Section tag update ──
+        if (!isOpen) {
+          const nearest = CHECKPOINTS.reduce((a, b) =>
+            Math.abs(scrollProg - b.prog) < Math.abs(scrollProg - a.prog)
+              ? b
+              : a,
+          );
+          if (Math.abs(scrollProg - nearest.prog) < 0.15) {
+            document.getElementById("section-tag").style.opacity = "0.55";
+            document.getElementById("section-tag").textContent = nearest.label;
+          } else {
+            document.getElementById("section-tag").style.opacity = "0";
+          }
+        }
+
+        // ── Journey complete ──
+        document.getElementById("done").style.opacity =
+          scrollProg > 0.97 ? "1" : "0";
+
+        renderer.render(scene, camera);
+      }
+
+      // ═══════════════════════════════════════════
+      // LOADING SCREEN
+      // ═══════════════════════════════════════════
+      function startLoading() {
+        const fill = document.getElementById("ld-fill");
+        const msg = document.getElementById("ld-msg");
+        const msgs = [
+          "INITIALIZING SCENE",
+          "BUILDING ROAD",
+          "CALIBRATING ENGINE",
+          "SYSTEMS READY",
+        ];
+        let i = 0;
+        const iv = setInterval(() => {
+          i++;
+          fill.style.width = i * 25 + "%";
+          if (i < msgs.length) msg.textContent = msgs[i];
+        }, 420);
+        setTimeout(() => {
+          clearInterval(iv);
+          fill.style.width = "100%";
+          msg.textContent = "READY — START SCROLLING";
+          setTimeout(() => {
+            const ld = document.getElementById("loading");
+            ld.style.transition = "opacity 0.9s";
+            ld.style.opacity = "0";
+            setTimeout(() => {
+              ld.style.display = "none";
+              animate();
+            }, 900);
+          }, 280);
+        }, 1900);
+      }
+
+      document.fonts.ready.then(startLoading);
     </script>
-</body>
+  </body>
 </html>
