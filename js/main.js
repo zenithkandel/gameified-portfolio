@@ -112,27 +112,206 @@
         });
     }
 
-    function initRevealAnimations() {
-        if (isReducedMotion) {
-            gsap.set('.reveal', { opacity: 1, y: 0 });
-            return;
-        }
+    function initParallax() {
+        if (isReducedMotion || isMobile) return;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    gsap.to(entry.target, {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.6,
-                        ease: 'power3.out'
-                    });
+        gsap.registerPlugin(ScrollTrigger);
+
+        const hero = document.getElementById('hero');
+        
+        const bgLayer = hero.querySelector('.hero-bg-layer');
+        const midLayer = hero.querySelector('.hero-mid-layer');
+        const fgLayer = hero.querySelector('.hero-fg-layer');
+
+        if (bgLayer) {
+            gsap.to(bgLayer, {
+                y: '20%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: hero,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: 0.5
                 }
             });
-        }, { threshold: 0.2 });
+        }
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
+        if (midLayer) {
+            gsap.to(midLayer, {
+                y: '35%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: hero,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: 0.5
+                }
+            });
+        }
+
+        if (fgLayer) {
+            gsap.to(fgLayer, {
+                y: '50%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: hero,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: 0.5
+                }
+            });
+        }
+
+        const about = document.getElementById('about');
+        const aboutBg = about.querySelector('.about-bg-layer');
+        if (aboutBg) {
+            gsap.to(aboutBg, {
+                y: '-15%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: about,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.5
+                }
+            });
+        }
+
+        const skills = document.getElementById('skills');
+        const skillsBg = skills.querySelector('.skills-bg-layer');
+        if (skillsBg) {
+            gsap.to(skillsBg, {
+                y: '-20%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: skills,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.5
+                }
+            });
+        }
+
+        const projects = document.getElementById('projects');
+        const projectsBg = projects.querySelector('.projects-bg-layer');
+        if (projectsBg) {
+            gsap.to(projectsBg, {
+                y: '-15%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: projects,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.5
+                }
+            });
+        }
+
+        const contact = document.getElementById('contact');
+        const contactBg = contact.querySelector('.contact-bg-layer');
+        if (contactBg) {
+            gsap.to(contactBg, {
+                y: '-10%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: contact,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.5
+                }
+            });
+        }
+    }
+
+    function initUniqueAnimations() {
+        if (isReducedMotion) return;
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        document.querySelectorAll('.section-title, .section-subtitle, .about-body, .pull-quote, .stat-item, .skills-header, .skills-grid, .projects-header, .contact-content').forEach(el => {
+            gsap.fromTo(el, 
+                { 
+                    opacity: 0,
+                    filter: 'blur(10px)',
+                    scale: 0.95
+                },
+                {
+                    opacity: 1,
+                    filter: 'blur(0px)',
+                    scale: 1,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 80%',
+                    }
+                }
+            );
+        });
+
+        document.querySelectorAll('.stat-item').forEach((el, index) => {
+            gsap.fromTo(el,
+                {
+                    opacity: 0,
+                    scale: 0.8,
+                    rotate: -5
+                },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    rotate: 0,
+                    duration: 0.6,
+                    delay: index * 0.15,
+                    ease: 'back.out(1.7)',
+                    scrollTrigger: {
+                        trigger: '.stats-row',
+                        start: 'top 80%',
+                    }
+                }
+            );
+        });
+
+        document.querySelectorAll('.specimen-box').forEach((el, index) => {
+            gsap.fromTo(el,
+                {
+                    opacity: 0,
+                    scale: 0.9,
+                    y: 30
+                },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    delay: index * 0.08,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.skills-grid',
+                        start: 'top 75%',
+                    }
+                }
+            );
+        });
+
+        document.querySelectorAll('.project-card').forEach((el, index) => {
+            const isEven = index % 2 === 1;
+            
+            gsap.fromTo(el,
+                {
+                    opacity: 0,
+                    x: isEven ? 50 : -50
+                },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                    }
+                }
+            );
         });
     }
 
@@ -198,71 +377,6 @@
         });
     }
 
-    function initCardTilt() {
-        if (isReducedMotion || isMobile) return;
-
-        const tiltCards = document.querySelectorAll('[data-tilt]');
-
-        tiltCards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const rotateX = ((y - centerY) / centerY) * -8;
-                const rotateY = ((x - centerX) / centerX) * 8;
-
-                gsap.to(card, {
-                    rotationX: rotateX,
-                    rotationY: rotateY,
-                    duration: 0.3,
-                    ease: 'power2.out'
-                });
-            });
-
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    rotationX: 0,
-                    rotationY: 0,
-                    duration: 0.5,
-                    ease: 'power2.out'
-                });
-            });
-
-            const shine = document.createElement('div');
-            shine.className = 'card-shine';
-            shine.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: radial-gradient(circle at var(--shine-x, 50%) var(--shine-y, 50%), rgba(255,255,255,0.15) 0%, transparent 50%);
-                pointer-events: none;
-                opacity: 0;
-                transition: opacity 0.3s;
-            `;
-            card.appendChild(shine);
-
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-                shine.style.setProperty('--shine-x', x + '%');
-                shine.style.setProperty('--shine-y', y + '%');
-                shine.style.opacity = '1';
-            });
-
-            card.addEventListener('mouseleave', () => {
-                shine.style.opacity = '0';
-            });
-        });
-    }
-
     function init() {
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
             document.addEventListener('DOMContentLoaded', () => {
@@ -277,10 +391,10 @@
             initCurtainReveal();
             initNavbar();
             initMobileNav();
-            initRevealAnimations();
+            initParallax();
+            initUniqueAnimations();
             initSectionTracking();
             initThemeToggle();
-            initCardTilt();
         });
     }
 
