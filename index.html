@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Kandel | Self-Taught Developer & Creative Builder</title>
+    <meta name="description" content="Portfolio of Zenith Kandel - Self-taught developer from Kathmandu, Nepal. Building immersive web experiences.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=IM+Fell+English:ital@1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <div class="cursor" id="cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <div class="curtain-left" aria-hidden="true"></div>
+    <div class="curtain-right" aria-hidden="true"></div>
+
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-monogram">ZK</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero-bg-layer" data-parallax="0.15">
+                <svg class="world-map-outline" viewBox="0 0 800 400" aria-hidden="true">
+                    <path d="M100,100 Q200,80 300,100 T500,100 T700,100" fill="none" stroke="currentColor" stroke-width="1"/>
+                    <path d="M50,200 Q150,180 250,200 T450,200 T650,200 T750,200" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                    <path d="M100,300 Q200,280 300,300 T500,300 T700,300" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                </svg>
+                <div class="coordinate-line coordinate-h"></div>
+                <div class="coordinate-line coordinate-v"></div>
+            </div>
+
+            <div class="hero-mid-layer" data-parallax="0.35">
+                <svg class="compass-rose" viewBox="0 0 100 100" aria-hidden="true">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="1"/>
+                    <path d="M50,10 L50,90 M10,50 L90,50" stroke="currentColor" stroke-width="0.5"/>
+                    <path d="M50,5 L53,20 L50,25 L47,20 Z" fill="currentColor"/>
+                    <path d="M50,95 L47,80 L50,75 L53,80 Z" fill="currentColor"/>
+                    <path d="M5,50 L20,47 L25,50 L20,53 Z" fill="currentColor"/>
+                    <path d="M95,50 L80,47 L75,50 L80,53 Z" fill="currentColor"/>
+                </svg>
+                <div class="ornamental-frame"></div>
+                <span class="watermark-roman">I</span>
+            </div>
+
+            <div class="hero-content">
+                <p class="hero-eyebrow">Est. 2021 • Kathmandu, Nepal</p>
+                <h1 class="hero-title">
+                    <span class="title-line title-zenith">ZENITH</span>
+                    <span class="title-line title-kandel">
+                        <span class="strike-through">KANDEL</span>
+                    </span>
+                </h1>
+                <p class="hero-subtitle">Self-Taught Developer & Creative Builder</p>
+                <div class="ornamental-divider">
+                    <span class="divider-line"></span>
+                    <span class="divider-diamond">◆</span>
+                    <span class="divider-line"></span>
+                </div>
+                <p class="hero-details">Kathmandu, Nepal • Grade 11 • 4+ Years Experience</p>
+                <a href="#projects" class="cta-button">Explore Work →</a>
+            </div>
+
+            <div class="hero-fg-layer" data-parallax="0.6">
+                <span class="floating-tag tag-1">[ developer ]</span>
+                <span class="floating-tag tag-2">[ builder ]</span>
+                <span class="floating-tag tag-3">[ designer ]</span>
+                <span class="fleuron fleuron-1">⁂</span>
+                <span class="fleuron fleuron-2">⁂</span>
+                <span class="fleuron fleuron-3">⁂</span>
+            </div>
+        </section>
+
+        <section class="about" id="about">
+            <div class="about-bg-layer" data-parallax="0.2">
+                <span class="zk-monogram">ZK</span>
+                <svg class="nepal-outline" viewBox="0 0 200 250" aria-hidden="true">
+                    <path d="M100,20 L120,50 L110,80 L130,100 L120,130 L140,160 L120,200 L100,220 L80,200 L60,160 L80,130 L70,100 L90,80 L80,50 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                </svg>
+            </div>
+
+            <div class="container">
+                <div class="about-layout">
+                    <div class="about-sidebar">
+                        <span class="rotated-label">About</span>
+                    </div>
+                    <div class="about-content">
+                        <span class="section-eyebrow reveal">— Chapter I</span>
+                        <h2 class="section-title reveal">The Maker Behind The Machine</h2>
+                        <p class="about-body reveal">
+                            I'm Zenith Kandel, a self-taught developer based in Kathmandu, Nepal. Currently in Grade 11, I started coding early and have been building real-world web projects ever since. My focus is on creating modern, visually immersive, and scalable web experiences that combine engineering precision with thoughtful UI/UX design.
+                        </p>
+                        <blockquote class="pull-quote reveal">
+                            "I prefer learning by building, experimenting, and refining ideas into polished products."
+                        </blockquote>
+                        <div class="stats-row reveal">
+                            <div class="stat-item">
+                                <span class="stat-number">4+</span>
+                                <span class="stat-label">Years Coding</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">10+</span>
+                                <span class="stat-label">Projects Built</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">11</span>
+                                <span class="stat-label">Grade</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="skills" id="skills">
+            <div class="skills-bg-layer" data-parallax="0.2">
+                <svg class="gear-svg" viewBox="0 0 200 200" aria-hidden="true">
+                    <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="1"/>
+                    <path d="M100,20 L100,40 M100,160 L100,180 M20,100 L40,100 M160,100 L180,100" stroke="currentColor" stroke-width="2"/>
+                    <path d="M45,45 L58,58 M142,142 L155,155 M45,155 L58,142 M142,58 L155,45" stroke="currentColor" stroke-width="1"/>
+                </svg>
+            </div>
+
+            <div class="container">
+                <div class="skills-header">
+                    <h2 class="section-title reveal">The Arsenal</h2>
+                    <p class="section-subtitle reveal">Modern Engineering</p>
+                </div>
+
+                <div class="skills-grid">
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">HTML</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Frontend Layer</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">CSS</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Styling Engine</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">JavaScript</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.408 2.711-.33.24-1.187.601-2.265.601-2.476-.063-2.934-1.652-2.934-3.216 0-2.116 1.168-3.529 3.056-3.529 1.611-.066 3.101.36 3.812 1.548l-1.014.78z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Logic Core</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">PHP</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 0L1.392 5.288v11.424L12 24l10.608-6.288V5.288L12 0zm-1.896 15.312L5.568 11.4l-.816 1.176-.912-.624-3.264 5.28 4.86 2.712.6-.84-3.948-2.208 2.016-1.392 1.176.936 1.608.96zm7.536-4.968l-1.104-.696-1.752 1.272.432.696 2.424-1.272zm-4.536-3.6l-2.448-1.512L6.6 4.8l.576.36 5.232 3.024-.456.36z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Server Side</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">Tailwind</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Utility First</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">React</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 10.11c1.03 0 1.87.84 1.87 1.89 0 1-.84 1.85-1.87 1.85-1.03 0-1.87-.85-1.87-1.85 0-1.05.84-1.89 1.87-1.89M7.37 20c.63.38 2.01-.2 3.6-1.7-.52-.59-1.03-1.23-1.51-1.9-.82-.09-1.63-.2-2.4-.33-.33.9-.61 1.84-.69 2.93zm8.25-18.96c.31.18.58.45.81.77 1.26 1.66 1.58 4.34.86 6.46-1.34.16-2.71.35-4.04.57-.27-.54-.45-1.13-.54-1.74-.17-1.13-.1-2.27.25-3.31.49-1.44 1.43-2.67 2.66-2.75zm-10.6 3.67c.53.05 1.13.17 1.74.37-.4-.77-.86-1.51-1.32-2.2-.83-.13-1.63-.2-2.4-.21.51 1.02 1.35 2.04 2.98 2.04zM5.39 7.13c.36.77.83 1.49 1.37 2.14 1.08.11 2.17.15 3.27.1-.04-.86.15-1.8.52-2.75-.68-.04-1.38-.1-2.07-.2-.92-.55-1.82-1.15-2.22-1.84.67-.01 1.37.01 2.06.16-.22.37-.69.8-.93 1.39zm8.33 2.99c.04.86-.11 1.69-.45 2.44.73.02 1.48.05 2.23.08-.09-.39-.21-.77-.38-1.11-.62-.3-1.2-.54-1.73-.76.07-.33.22-.65.33-.65zm-3.35-1.92c.18.14.38.24.59.31 1.2.43 2.32.63 3.27.67-.23-.23-.51-.43-.79-.59-.77-.38-1.48-.71-2.05-1.01-.35-.17-.67-.34-.97-.5-.03.12-.04.23-.05.34v.78zm2.33-1.37c.17-.01.34-.02.51-.02-1.09-.02-2.21-.19-3.31-.52.63.1 1.29.2 1.98.3.61.11 1.22.22 1.82.24zm4.55-.16c-.42-.05-.88-.09-1.38-.13.34.26.63.59.88.94.25.34.46.69.63 1.04.79.11 1.54.2 2.21.27-.03-1.04-.25-2.06-.87-2.83-.33-.4-.79-.73-1.47-.29zm-11.14-.16c.52-.01 1.06.02 1.59.1-.12-.23-.28-.44-.48-.62-.57-.5-1.32-.82-2.2-.91.45.49.93.98 1.45 1.41.18.14.42.24.64.02z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Component Lib</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">Node.js</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 1.85c-.27 0-.55.07-.78.2l-7.44 4.3c-.48.28-.78.8-.78 1.36v8.58c0 .56.3 1.08.78 1.36l1.95 1.12c.95.46 1.27.46 1.71.46 1.4 0 2.21-.85 2.21-2.33V8.44c0-.1-.07-.18-.17-.18-.1 0-.18.08-.18.18v5.74c0 .77-.45 1.15-1.22 1.15-.53 0-.93-.15-1.41-.45l-1.87-1.07V9.19c0-.55-.3-1.08-.78-1.36L7.15 5.71c-.02-.01-.04-.02-.06-.02-.27 0-.52.23-.52.52v8.58c0 .12.1.22.22.22s.22-.1.22-.22V7.55l7.44-4.29c.02 0 .04-.01.06-.01.27 0 .52.22.52.52v8.58c0 .12.1.22.22.22s.22-.1.22-.22V6.86l-7.44-4.29c-.02 0-.04-.01-.06-.01h-.01z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Runtime</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">MongoDB</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Database</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">MySQL</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.08 5.1 7.63 12 4.18zM4 8.82l7 3.5v6.86l-7-3.5V8.82zm9 10.36v-6.86l7-3.5v6.86l-7 3.5z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Relational DB</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">Cloud</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Infrastructure</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">DevOps</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M22 6v2c0-1.1-.9-2-2-2h-2V4H8v2H6c-1.1 0-2 .9-2 2v2H0v2h2v6H0v2h2v2c0 1.1.9 2 2 2h2v-2h8v2h2c1.1 0 2-.9 2-2v-2h2v-6h2V8h-2V6h-2zm-12 6H6v-4h4v4zm6 0h-4v-4h4v4zm6 0h-4v-4h4v4z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Automation</span>
+                    </div>
+
+                    <div class="specimen-box reveal">
+                        <span class="specimen-corner tl">✦</span>
+                        <span class="specimen-corner tr">✦</span>
+                        <span class="specimen-corner bl">✦</span>
+                        <span class="specimen-corner br">✦</span>
+                        <span class="specimen-name">AI</span>
+                        <svg class="specimen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1-2.63 2.21-2.91 5.86-1.08 8.66l1.43 1.41C8.56 16.47 9.35 16.8 10.17 16.8c.82 0 1.61-.33 2.21-.9l4.33 4.33c.71.71 1.87.71 2.57 0 .71-.7.71-1.86 0-2.56l-3.76-3.76c.55-.82.87-1.77.87-2.76 0-2.99-2.36-5.43-5.29-5.43-1.46 0-2.8.59-3.77 1.55l-2.14-2.14c1.37-1.08 3.16-1.74 5.08-1.74 4.28 0 7.76 3.48 7.76 7.76 0 1.99-.75 3.81-2.01 5.17l2.14 2.14c.9-.89 1.45-2.14 1.45-3.47-.01-3.31-2.7-6-6.01-6z" fill="currentColor"/>
+                        </svg>
+                        <hr class="specimen-rule">
+                        <span class="specimen-class">Workflows</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="projects" id="projects">
+            <div class="projects-bg-layer" data-parallax="0.15">
+                <div class="blueprint-grid"></div>
+            </div>
+
+            <div class="container">
+                <div class="projects-header">
+                    <h2 class="section-title reveal">The Works</h2>
+                    <p class="section-subtitle reveal">Selected Projects</p>
+                </div>
+
+                <div class="projects-list">
+                    <article class="project-card reveal" data-tilt>
+                        <span class="project-number">01</span>
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <svg viewBox="0 0 100 60" aria-hidden="true">
+                                    <rect x="10" y="10" width="80" height="40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <circle cx="50" cy="30" r="10" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <path d="M35,30 L45,35 L45,25 Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">CineStream</h3>
+                            <p class="project-desc">Movie Streaming Platform</p>
+                            <div class="project-tags">
+                                <span class="tag">React</span>
+                                <span class="tag">Node.js</span>
+                                <span class="tag">MongoDB</span>
+                            </div>
+                            <a href="#" class="project-link">View Project →</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal" data-tilt>
+                        <span class="project-number">02</span>
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <svg viewBox="0 0 100 60" aria-hidden="true">
+                                    <rect x="10" y="10" width="80" height="40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <rect x="20" y="15" width="20" height="15" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <rect x="45" y="15" width="20" height="15" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">FocusBoard</h3>
+                            <p class="project-desc">Productivity Dashboard</p>
+                            <div class="project-tags">
+                                <span class="tag">React</span>
+                                <span class="tag">Tailwind</span>
+                                <span class="tag">MySQL</span>
+                            </div>
+                            <a href="#" class="project-link">View Project →</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal" data-tilt>
+                        <span class="project-number">03</span>
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <svg viewBox="0 0 100 60" aria-hidden="true">
+                                    <rect x="10" y="10" width="80" height="40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <circle cx="35" cy="30" r="8" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <path d="M55,25 L75,25 L75,35 L55,35 Z" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">AttendAI</h3>
+                            <p class="project-desc">Smart Attendance System</p>
+                            <div class="project-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">OpenCV</span>
+                                <span class="tag">Node.js</span>
+                            </div>
+                            <a href="#" class="project-link">View Project →</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal" data-tilt>
+                        <span class="project-number">04</span>
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <svg viewBox="0 0 100 60" aria-hidden="true">
+                                    <rect x="10" y="10" width="80" height="40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <path d="M20,25 L30,25 M20,30 L40,30 M20,35 L35,35" stroke="currentColor" stroke-width="0.5"/>
+                                    <rect x="55" y="20" width="25" height="20" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">VentureKit</h3>
+                            <p class="project-desc">Startup Concept & Landing Sites</p>
+                            <div class="project-tags">
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">JS</span>
+                            </div>
+                            <a href="#" class="project-link">View Project →</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal" data-tilt>
+                        <span class="project-number">05</span>
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <svg viewBox="0 0 100 60" aria-hidden="true">
+                                    <rect x="10" y="10" width="80" height="40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <circle cx="30" cy="30" r="12" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <path d="M55,20 L80,20 L80,40 L55,40 Z" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                                    <circle cx="67.5" cy="30" r="5" fill="currentColor" opacity="0.3"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">Portfolio OS</h3>
+                            <p class="project-desc">Cinematic Portfolio Experience</p>
+                            <div class="project-tags">
+                                <span class="tag">GSAP</span>
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                            </div>
+                            <a href="#" class="project-link">View Project →</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="contact-bg-layer" data-parallax="0.1">
+                <svg class="compass-large" viewBox="0 0 200 200" aria-hidden="true">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="1"/>
+                    <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                    <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                    <path d="M100,10 L100,190 M10,100 L190,100" stroke="currentColor" stroke-width="0.5"/>
+                    <path d="M100,10 L105,25 L100,20 L95,25 Z" fill="currentColor"/>
+                    <path d="M100,190 L95,175 L100,180 L105,175 Z" fill="currentColor"/>
+                    <path d="M10,100 L25,95 L20,100 L25,105 Z" fill="currentColor"/>
+                    <path d="M190,100 L175,95 L180,100 L175,105 Z" fill="currentColor"/>
+                </svg>
+            </div>
+
+            <div class="container">
+                <div class="contact-content">
+                    <h2 class="contact-title reveal">
+                        <span class="word">Let's</span>
+                        <span class="word">Build</span>
+                        <span class="word">Something</span>
+                    </h2>
+                    <p class="contact-subtitle reveal">Real. Ambitious. Extraordinary.</p>
+
+                    <a href="mailto:zenithkandel@gmail.com" class="contact-email reveal">zenithkandel@gmail.com</a>
+
+                    <div class="social-links reveal">
+                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-link">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/>
+                            </svg>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-link">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" fill="currentColor"/>
+                            </svg>
+                            <span>LinkedIn</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-ornament-top"></div>
+        <div class="footer-content">
+            <span class="footer-copyright">© MMXXV Zenith Kandel</span>
+            <span class="footer-logo">✦</span>
+            <span class="footer-location">Kathmandu, Nepal</span>
+        </div>
+        <p class="footer-credit">Handcrafted with obsessive attention to detail.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="js/cursor.js"></script>
+    <script src="js/parallax.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
