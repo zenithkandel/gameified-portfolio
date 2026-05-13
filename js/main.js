@@ -3,7 +3,6 @@
     const isMobile = window.innerWidth < 768;
 
     const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
-    let currentSection = 0;
 
     function initCurtainReveal() {
         if (isReducedMotion || isMobile) {
@@ -44,14 +43,12 @@
 
     function initNavbar() {
         const navbar = document.getElementById('navbar');
-
         if (isReducedMotion) return;
 
         const heroHeight = document.getElementById('hero').offsetHeight;
         
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
-            
             if (scrollY > heroHeight * 0.3) {
                 navbar.classList.remove('hidden');
                 navbar.classList.add('visible');
@@ -69,14 +66,6 @@
             duration: 0.6,
             stagger: 0.1,
             delay: 2,
-            ease: 'power2.out'
-        });
-
-        gsap.from('.theme-toggle', {
-            opacity: 0,
-            y: -20,
-            duration: 0.6,
-            delay: 2.2,
             ease: 'power2.out'
         });
     }
@@ -119,108 +108,129 @@
 
         const hero = document.getElementById('hero');
         
-        const bgLayer = hero.querySelector('.hero-bg-layer');
-        const midLayer = hero.querySelector('.hero-mid-layer');
-        const fgLayer = hero.querySelector('.hero-fg-layer');
+        // Hero background - slowest
+        gsap.to('.hero-bg-layer', {
+            y: '30%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: hero,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.3
+            }
+        });
 
-        if (bgLayer) {
-            gsap.to(bgLayer, {
-                y: '20%',
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: hero,
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: 0.5
-                }
-            });
-        }
+        // Buildings layer - different speed
+        gsap.to('.hero-buildings-layer', {
+            y: '25%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: hero,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.4
+            }
+        });
 
-        if (midLayer) {
-            gsap.to(midLayer, {
-                y: '35%',
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: hero,
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: 0.5
-                }
-            });
-        }
+        // Silhouette - medium speed
+        gsap.to('.hero-silhouette-layer', {
+            y: '15%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: hero,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.5
+            }
+        });
 
-        if (fgLayer) {
-            gsap.to(fgLayer, {
-                y: '50%',
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: hero,
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: 0.5
-                }
-            });
-        }
+        // Mid layer (compass, frame)
+        gsap.to('.hero-mid-layer', {
+            y: '40%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: hero,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.5
+            }
+        });
 
+        // Particles - fast
+        gsap.to('.hero-particles', {
+            y: '60%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: hero,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.6
+            }
+        });
+
+        // Content - fastest (opposite direction for depth)
+        gsap.to('.hero-content', {
+            y: '-20%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: hero,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.7
+            }
+        });
+
+        // About section
         const about = document.getElementById('about');
-        const aboutBg = about.querySelector('.about-bg-layer');
-        if (aboutBg) {
-            gsap.to(aboutBg, {
-                y: '-15%',
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: about,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 0.5
-                }
-            });
-        }
+        gsap.to('.about-bg-layer', {
+            y: '-20%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: about,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.4
+            }
+        });
 
+        // Skills section
         const skills = document.getElementById('skills');
-        const skillsBg = skills.querySelector('.skills-bg-layer');
-        if (skillsBg) {
-            gsap.to(skillsBg, {
-                y: '-20%',
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: skills,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 0.5
-                }
-            });
-        }
+        gsap.to('.skills-bg-layer', {
+            y: '-25%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: skills,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.4
+            }
+        });
 
+        // Projects section
         const projects = document.getElementById('projects');
-        const projectsBg = projects.querySelector('.projects-bg-layer');
-        if (projectsBg) {
-            gsap.to(projectsBg, {
-                y: '-15%',
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: projects,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 0.5
-                }
-            });
-        }
+        gsap.to('.projects-bg-layer', {
+            y: '-15%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: projects,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.4
+            }
+        });
 
+        // Contact section
         const contact = document.getElementById('contact');
-        const contactBg = contact.querySelector('.contact-bg-layer');
-        if (contactBg) {
-            gsap.to(contactBg, {
-                y: '-10%',
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: contact,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 0.5
-                }
-            });
-        }
+        gsap.to('.contact-bg-layer', {
+            y: '-10%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: contact,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.3
+            }
+        });
     }
 
     function initUniqueAnimations() {
@@ -228,34 +238,50 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        document.querySelectorAll('.section-title, .section-subtitle, .about-body, .pull-quote, .stat-item, .skills-header, .skills-grid, .projects-header, .contact-content').forEach(el => {
+        // Skills progress bars animation
+        gsap.from('.skill-progress', {
+            width: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: '.skills-showcase',
+                start: 'top 70%',
+            }
+        });
+
+        // Skill wheel items
+        gsap.from('.wheel-item', {
+            scale: 0,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.15,
+            ease: 'back.out(1.7)',
+            scrollTrigger: {
+                trigger: '.skills-wheel',
+                start: 'top 70%',
+            }
+        });
+
+        // Section titles with blur
+        document.querySelectorAll('.section-title, .section-subtitle').forEach(el => {
             gsap.fromTo(el, 
-                { 
-                    opacity: 0,
-                    filter: 'blur(10px)',
-                    scale: 0.95
-                },
+                { opacity: 0, filter: 'blur(10px)', scale: 0.95 },
                 {
                     opacity: 1,
                     filter: 'blur(0px)',
                     scale: 1,
                     duration: 0.8,
                     ease: 'power2.out',
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top 80%',
-                    }
+                    scrollTrigger: { trigger: el, start: 'top 80%' }
                 }
             );
         });
 
+        // Stats with bounce
         document.querySelectorAll('.stat-item').forEach((el, index) => {
             gsap.fromTo(el,
-                {
-                    opacity: 0,
-                    scale: 0.8,
-                    rotate: -5
-                },
+                { opacity: 0, scale: 0.8, rotate: -5 },
                 {
                     opacity: 1,
                     scale: 1,
@@ -263,53 +289,22 @@
                     duration: 0.6,
                     delay: index * 0.15,
                     ease: 'back.out(1.7)',
-                    scrollTrigger: {
-                        trigger: '.stats-row',
-                        start: 'top 80%',
-                    }
+                    scrollTrigger: { trigger: '.stats-row', start: 'top 80%' }
                 }
             );
         });
 
-        document.querySelectorAll('.specimen-box').forEach((el, index) => {
-            gsap.fromTo(el,
-                {
-                    opacity: 0,
-                    scale: 0.9,
-                    y: 30
-                },
-                {
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    duration: 0.5,
-                    delay: index * 0.08,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: '.skills-grid',
-                        start: 'top 75%',
-                    }
-                }
-            );
-        });
-
+        // Project cards from sides
         document.querySelectorAll('.project-card').forEach((el, index) => {
             const isEven = index % 2 === 1;
-            
             gsap.fromTo(el,
-                {
-                    opacity: 0,
-                    x: isEven ? 50 : -50
-                },
+                { opacity: 0, x: isEven ? 80 : -80 },
                 {
                     opacity: 1,
                     x: 0,
                     duration: 0.8,
                     ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top 85%',
-                    }
+                    scrollTrigger: { trigger: el, start: 'top 85%' }
                 }
             );
         });
@@ -324,8 +319,6 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const sectionIndex = sections.indexOf(entry.target.id);
-                    currentSection = sectionIndex;
-                    
                     navLinks.forEach(link => {
                         link.classList.remove('active');
                         if (link.dataset.section == sectionIndex) {
@@ -347,7 +340,6 @@
                 const targetSection = link.dataset.section;
                 const targetId = sections[targetSection];
                 const targetElement = document.getElementById(targetId);
-                
                 if (targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth' });
                 }
