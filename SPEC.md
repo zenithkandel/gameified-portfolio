@@ -1,292 +1,282 @@
-# Cinematic Road Trip Portfolio - Specification Document
-
-## 1. Project Overview
-
-**Project Name:** Dev Journey - Cinematic Portfolio Experience
-**Project Type:** Single-page scroll-driven interactive website
-**Core Functionality:** A vertical scroll-controlled 3D car journey through a stylized environment, with checkpoint-based portfolio sections that trigger cinematic transitions
-**Target Users:** Recruiters, potential clients, and anyone viewing the developer's portfolio
-
----
-
-## 2. UI/UX Specification
-
-### Visual Theme: "Twilight Highway"
-
-A cinematic sunset/early-evening highway with neon accents. The sky transitions from warm orange/pink at the horizon to deep purple/navy overhead. The road stretches into infinity with strong perspective. Neon signs and futuristic elements appear as we progress.
-
-### Color Palette
-
-| Role | Color | Hex |
-|------|-------|-----|
-| Sky Gradient Top | Deep Indigo | `#0f0c29` |
-| Sky Gradient Mid | Twilight Purple | `#302b63` |
-| Sky Horizon | Sunset Orange | `#ff6b35` |
-| Road Surface | Dark Asphalt | `#1a1a2e` |
-| Road Lines | Hot Pink Neon | `#ff2e63` |
-| Road Edge Glow | Cyan | `#08f7fe` |
-| Accent Primary | Electric Magenta | `#e91e8c` |
-| Accent Secondary | Neon Cyan | `#00fff5` |
-| Text Primary | Pure White | `#ffffff` |
-| Text Secondary | Soft Lavender | `#b8b5d6` |
-| UI Panels | Semi-transparent Black | `rgba(10, 10, 30, 0.85)` |
-
-### Typography
-
-| Element | Font | Weight | Size |
-|---------|------|--------|------|
-| Main Headings | "Orbitron" (Google Fonts) | 700 | 48px-72px |
-| Subheadings | "Orbitron" | 500 | 24px-36px |
-| Body Text | "Rajdhani" (Google Fonts) | 400 | 16px-20px |
-| UI Elements | "Rajdhani" | 600 | 14px-18px |
-| Decorative/Counters | "Orbitron" | 900 | 120px+ |
-
-### Layout Structure
-
-**No traditional navigation bar or fixed UI elements**
-- The entire experience is immersive and scroll-driven
-- Minimal HUD elements that fade in/out contextually
-- Progress indicator showing journey position (subtle, bottom-right)
-
-### Parallax Depth Layers (from back to front)
-
-1. **Sky Layer** (0.1x scroll speed) - Gradient sky with subtle cloud wisps
-2. **Distant Mountains** (0.2x) - Silhouetted mountain range
-3. **Far City Skyline** (0.3x) - Distant futuristic city silhouette
-4. **Mid-ground Buildings** (0.5x) - Closer structures with neon windows
-5. **Road & Environment** (1x) - The road surface, lane markings
-6. **Car Layer** (fixed center) - The 3D car model
-7. **Foreground Elements** (1.5x) - Road signs, barriers, particles
-
-### Responsive Behavior
-
-- Desktop (1200px+): Full 3D WebGL scene with all effects
-- Tablet (768px-1199px): Simplified 3D, reduced particle effects
-- Mobile (320px-767px): 2D parallax fallback with CSS transforms
-
----
-
-## 3. Functionality Specification
-
-### Core Mechanics
-
-#### Scroll-to-Motion System
-- Vertical scroll position maps to car position on road
-- Scroll velocity determines car speed (inertia-based smoothing)
-- Maximum scroll distance: 50,000px (defines journey length)
-- Physics: `velocity = scrollDelta * 0.8` with `damping = 0.92`
-- Easing: Smooth interpolation with `lerp(factor=0.08)`
-
-#### Checkpoint System
-
-| Checkpoint | Position (scroll px) | Section | Trigger Distance |
-|------------|---------------------|---------|-------------------|
-| Start | 0 | Intro/Hero | - |
-| CP1 | 8,000 | About | 500px before |
-| CP2 | 18,000 | Skills | 500px before |
-| CP3 | 28,000 | Projects | 500px before |
-| CP4 | 38,000 | Experience | 500px before |
-| CP5 | 45,000 | Contact | 500px before |
-
-#### Environment Transitions
-
-When approaching a checkpoint (±500px):
-1. Road speed gradually decreases
-2. Environment elements shift to form "stage" layout
-3. Car animation transitions to "arriving" state
-4. Overlay UI fades in with staggered elements
-5. Scrolling becomes disabled or heavily dampened within checkpoint
-
-### Checkpoint Details
-
-#### Checkpoint 1: About (Identity)
-- **Trigger:** Approaching shows a large holographic billboard by the roadside
-- **Transition:** Billboard expands to fill screen, car slows to stop beside it
-- **Content:** Developer name, title, brief bio, profile image (stylized)
-- **Animation:** Particles coalesce to form text, gradient background pulse
-- **Interaction:** Scroll to dismiss, car resumes journey
-
-#### Checkpoint 2: Skills (Garage Workshop)
-- **Trigger:** Roadside transforms into futuristic garage/workshop
-- **Transition:** Car enters garage, tools/panels animate onto screen
-- **Content:** Skills displayed as glowing holographic tools, each with proficiency meter
-- **Visuals:** 
-  - Skills as 3D floating icons (hover: spin + glow)
-  - Proficiency bars animate on scroll
-  - Particle trails between related skills
-- **Categories:** Frontend, Backend, Tools, Soft Skills (hover reveals)
-
-#### Checkpoint 3: Projects (Hologram Display)
-- **Transition:** Car passes floating project "holograms" along the road
-- **Content:** 4-6 projects as interactive holographic panels
-- **Interaction:**
-  - Click/hover expands project into modal view
-  - Navigation via horizontal scroll within checkpoint
-  - Each project: title, thumbnail, tech stack, brief, link
-- **Animation:** Projects float with subtle bob, glow on hover
-
-#### Checkpoint 4: Experience (Data Highway)
-- **Transition:** Road transforms into data highway with animated graphs/stats
-- **Content:** Timeline of experience, achievements as floating data blocks
-- **Visuals:**
-  - Animated bar charts showing years/impact
-  - Floating milestone markers
-  - Connected nodes showing career progression
-- **Animation:** Data points animate in sequence with scroll
-
-#### Checkpoint 5: Contact (Terminal Station)
-- **Transition:** Car pulls into a futuristic terminal station
-- **Interaction:** 
-  - Contact form as terminal interface
-  - Buttons for: Email, GitHub, LinkedIn, Twitter
-  - Each button triggers animated response
-- **Visuals:**
-  - Terminal-style input fields with blinking cursor
-  - "Transmission" animation on send
-  - Success feedback with particle burst
-
-### Ambient Effects
-
-1. **Particle System:**
-   - Dust/digital particles floating across screen
-   - Speed increases with scroll velocity
-   - Color shifts between sections
-
-2. **Lighting:**
-   - Dynamic sun/moon position based on scroll
-   - Neon flicker effects on signs
-   - Car headlights cast glow on environment
-
-3. **Atmosphere:**
-   - Subtle fog/mist layers
-   - Heat shimmer effect near horizon
-   - Stars fade in as journey progresses (evening to night transition)
-
-4. **Camera Shake:**
-   - Subtle shake based on speed
-   - Increases when passing checkpoint markers
-
-### User Controls
-
-- **Primary:** Vertical scroll (mouse wheel, touch swipe, trackpad)
-- **Secondary:** Arrow keys for fine control within checkpoints
-- **No:** Traditional click navigation, fixed nav menu
-
-### Edge Cases
-
-- Touch devices: Pinch-to-zoom disabled, scroll hijacking prevented
-- Very fast scroll: Velocity capped to prevent visual glitches
-- Very slow scroll: Minimum progress ensured
-- Resize: Canvas recalculates, maintains aspect ratio
-- JS disabled: Fallback to simple vertical scroll with static sections
-
----
-
-## 4. Technical Implementation
-
-### Libraries & Tools
-
-| Purpose | Library | Version | CDN |
-|---------|---------|---------|-----|
-| 3D Rendering | Three.js | r158+ | unpkg/three |
-| Animation | GSAP | 3.12+ | cdnjs/gsap |
-| Scroll Control | GSAP ScrollTrigger | 3.12+ | cdnjs/gsap |
-| Physics | Custom (no library) | - | - |
-
-### File Structure
-
-```
-portfolio/
-├── index.html (single file with embedded CSS/JS)
-├── SPEC.md
-└── README.md
-```
-
-### Performance Targets
-
-- Initial load: < 3 seconds on 4G
-- Frame rate: 60fps on desktop, 30fps minimum on mobile
-- Memory: < 100MB GPU allocation
-- Lazy load: Non-critical assets load after initial paint
-
----
-
-## 5. Acceptance Criteria
-
-### Visual Checkpoints
-
-- [ ] Sky gradient renders correctly with sunset colors
-- [ ] Road has strong perspective convergence to horizon
-- [ ] Car model visible and centered
-- [ ] Parallax layers move at different speeds
-- [ ] Neon elements glow with appropriate blur
-- [ ] Particles flow across screen
-
-### Functional Checkpoints
-
-- [ ] Scroll moves car forward along road
-- [ ] Car movement has inertia/easing (not instant)
-- [ ] All 5 checkpoints trigger at correct scroll positions
-- [ ] Each checkpoint displays correct content type
-- [ ] Transitions between checkpoints are smooth
-- [ ] No jarring jumps or visual glitches
-
-### Interaction Checkpoints
-
-- [ ] About section expands from roadside element
-- [ ] Skills animate on hover/interaction
-- [ ] Projects are clickable and expandable
-- [ ] Experience timeline animates
-- [ ] Contact form is functional (can copy email)
-- [ ] Journey can be scrolled from start to finish
-
-### Performance Checkpoints
-
-- [ ] No console errors on load
-- [ ] Smooth 60fps animation on desktop
-- [ ] No memory leaks during long scroll sessions
-- [ ] Assets load without blocking
-
----
-
-## 6. Content Data
-
-### Developer Profile (Checkpoint 1)
-```
-Name: Alex Chen
-Title: Creative Developer
-Tagline: "Crafting digital experiences that inspire"
-Bio: Full-stack developer with 5+ years of experience building immersive web experiences. Passionate about the intersection of design and technology.
-```
-
-### Skills (Checkpoint 2)
-```
-Frontend: JavaScript, React, Three.js, WebGL, CSS/Animation
-Backend: Node.js, Python, PostgreSQL, GraphQL
-Tools: Git, Docker, Figma, Blender
-Soft Skills: Team Leadership, Problem Solving, Communication
-```
-
-### Projects (Checkpoint 3)
-```
-1. "Neural Visualizer" - AI-powered data visualization tool
-2. "Cyber Commerce" - E-commerce platform with 3D product views
-3. "Synthwave Radio" - Streaming music app with reactive visuals
-4. "Dev Portfolio Engine" - CMS for creative portfolios
-```
-
-### Experience (Checkpoint 4)
-```
-2024: Senior Developer @ TechCorp - Led team of 5
-2022: Full Stack Developer @ StartupXYZ - Built MVP from scratch
-2020: Junior Developer @ Agency123 - Web development projects
-2019: Freelance - Self-taught journey began
-```
-
-### Contact (Checkpoint 5)
-```
-Email: alex@example.com
-GitHub: github.com/alexchen
-LinkedIn: linkedin.com/in/alexchen
-Twitter: @alexchendev
-```
+Build a complete, production-ready personal portfolio website for Zenith Kandel from scratch. This is a high-fidelity, cinematic, antique-aesthetic portfolio with heavy parallax scrolling and multilayered animations. Every detail below is intentional — follow it precisely.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1: TECH STACK & SETUP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use: Vanilla HTML5, CSS3, JavaScript (ES6+)
+Animation library: GSAP 3 (GreenSock) with ScrollTrigger plugin — load from CDN
+NO frameworks (no React, no Vue) — pure DOM for performance
+File structure:
+/index.html
+/css/style.css
+/css/animations.css
+/js/main.js
+/js/parallax.js
+/js/cursor.js
+/assets/fonts/
+/assets/images/
+
+Fonts (load via Google Fonts):
+• Cormorant Garamond (weights: 300, 400, 600, 700, italic variants) — all headings
+• Inter (weights: 300, 400, 500) — body text
+• IM Fell English — accent/quote text
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2: DESIGN SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CSS Variables (define in :root):
+--bg-primary: #F5F0E8 (warm parchment)
+--bg-secondary: #EDE6D6 (deeper parchment)
+--accent: #C4622D (burnt orange)
+--accent-light: #E8936A (light terracotta)
+--ink: #2C1A0E (dark ink brown - primary text)
+--ink-muted: #6B4C35 (muted ink - secondary text)
+--border: #C9B99A (aged border)
+--gold: #B8972E (antique gold for ornaments)
+
+--font-display: 'Cormorant Garamond', serif
+--font-body: 'Inter', sans-serif
+--font-accent: 'IM Fell English', serif
+
+--scroll-smooth: cubic-bezier(0.16, 1, 0.3, 1)
+--parallax-slow: 0.15
+--parallax-mid: 0.4
+--parallax-fast: 0.7
+
+Custom cursor: Replace default cursor with a small crosshair (+) in --accent color that has a trailing circular ring with slight lag. Implement in cursor.js using mousemove event with lerp smoothing.
+
+Global styles:
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body { background: var(--bg-primary); color: var(--ink); cursor: none; }
+::selection { background: var(--accent); color: #fff; }
+Add a very subtle grain/noise texture overlay using an SVG filter on the body (feTurbulence + feDisplacementMap at very low opacity ~0.03) to give aged paper feel.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3: NAVIGATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fixed top navbar, starts transparent, gets a frosted parchment background (rgba(245, 240, 232, 0.92) + backdrop-filter: blur(12px)) on scroll past 80px.
+Left: "ZK" monogram in Cormorant Garamond 600 with a thin ornamental border around it.
+Right: Nav links in small-caps Inter 300 with an animated underline that draws from left on hover.
+Mobile: hamburger menu that opens a full-screen overlay nav with large Cormorant Garamond link items.
+GSAP animation on load: navbar items fade+slide down with 0.1s stagger after curtain reveal completes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4: HERO SECTION — CURTAIN REVEAL + PARALLAX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HTML structure:
+
+    ← left curtain panel
+
+← right curtain panel
+
+← slowest parallax, decorative BG
+
+← medium parallax, ornaments
+
+    ← main text content
+
+← fastest parallax, floating elements
+
+CURTAIN REVEAL ANIMATION (runs on DOMContentLoaded, before scroll):
+• Both curtain panels are absolutely positioned, full-height, width: 50%
+• Left panel: left: 0; Right panel: right: 0
+• They have an aged parchment texture with ornamental border-right / border-left
+• GSAP timeline:
+tl.to('.curtain-left', { x: '-100%', duration: 2, ease: 'power3.inOut' }, 0)
+tl.to('.curtain-right', { x: '100%', duration: 2, ease: 'power3.inOut' }, 0)
+tl.from('.hero-content', { opacity: 0, y: 30, duration: 1, ease: 'power2.out' }, 1.5)
+• After curtains exit, hide them with display:none
+
+HERO CONTENT:
+• Eyebrow text: "Est. 2021 • Kathmandu, Nepal" in small-caps, letter-spacing 0.2em, --ink-muted color
+• Main heading: "ZENITH" on line 1 (massive, ~12vw, Cormorant 300), "KANDEL" on line 2 (same size, 600 weight, with a thin ruled line through it or accent color)
+• Subtitle: "Self-Taught Developer & Creative Builder" in Inter 300, 1.2rem
+• A decorative ornamental divider (SVG line with diamond center) below heading
+• Small paragraph: location, grade, years of experience
+• CTA button: "Explore Work →" styled as an antique press button with --accent border and hover fill
+
+PARALLAX LAYERS (implemented via GSAP ScrollTrigger scrub):
+Layer 1 — .hero-bg-layer (scrub speed 0.15):
+Large faded world map outline (SVG, opacity 0.06) centered behind everything
+Two diagonal coordinate lines crossing the viewport
+
+Layer 2 — .hero-mid-layer (scrub speed 0.35):
+Small compass rose SVG top-right (opacity 0.15)
+Thin rectangular ornamental frame around the content area (drifts subtly)
+Roman numeral "I" watermark far left in Cormorant, huge, opacity 0.04
+
+Layer 3 — .hero-fg-layer (scrub speed 0.6):
+Small floating text elements: "[ developer ]", "[ builder ]", "[ designer ]" at corners
+Tiny ornamental asterisks/fleurons that drift
+
+ScrollTrigger setup for hero parallax:
+gsap.to('.hero-bg-layer', {
+yPercent: -30,
+ease: 'none',
+scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
+})
+// Repeat for mid and fg layers with different yPercent values
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5: ABOUT SECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Layout: Two columns — left has large decorative "About" heading rotated 90deg as a sidebar label, right has content.
+
+Content:
+• Section eyebrow: "— Chapter I"
+• Heading: "The Maker Behind The Machine" in Cormorant 600, 3.5rem
+• Body text (Inter 300, 1rem, line-height 1.9): Zenith's bio — self-taught developer, Grade 11, Kathmandu. Started coding early, building real-world web projects. Focuses on modern, visually immersive, scalable web experiences combining engineering with UI/UX design.
+• A pull quote in IM Fell English italic: "I prefer learning by building, experimenting, and refining ideas into polished products."
+• Stats row: "4+ Years Coding", "10+ Projects Built", "Grade 11 Student" — displayed as antique data labels
+
+PARALLAX in About:
+BG layer: Large faded "ZK" monogram (Cormorant, opacity 0.04) scrolls at 0.2x speed
+Floating thin horizontal rules appear from left as you scroll in
+A faded Nepal outline map SVG at 0.08 opacity drifts upward at 0.15x speed
+Section entrance: content columns slide in from opposite sides using ScrollTrigger + GSAP
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6: THE ARSENAL | MODERN ENGINEERING (Skills)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Section heading: "The Arsenal" in Cormorant 600, 4rem. Subtitle: "Modern Engineering" in small-caps Inter.
+
+Skills displayed as APOTHECARY SPECIMEN BOXES:
+Each skill is a card styled as an antique specimen/apothecary label:
+• Rectangular, portrait orientation (~160px × 200px)
+• Thick ornamental double-border (CSS border with inner box-shadow border trick)
+• Skill name in Cormorant 600 uppercase, centered
+• A small SVG icon or symbolic glyph below the name
+• A thin horizontal rule
+• A "classification" label below (e.g. "Frontend Layer", "Backend Engine", "Infrastructure")
+• Background: --bg-secondary with very subtle vignette
+• Corner ornaments (CSS ::before and ::after with content: '✦' or similar at corners)
+
+Layout: CSS Grid, auto-fill, minmax(150px, 1fr), gap 1.5rem
+Skills list: HTML, CSS, JavaScript, PHP, Tailwind CSS, React, Node.js, MongoDB, MySQL, Cloud Systems, DevOps, AI Workflows
+
+HOVER effect on each specimen box:
+transform: translateY(-8px) rotate(0.5deg);
+box-shadow: 8px 12px 24px rgba(44, 26, 14, 0.15);
+The inner ornamental border subtly glows in --accent color
+Transition: 0.4s ease
+
+PARALLAX in Arsenal:
+Section BG: large faded gear/cog SVG (opacity 0.04) scrolls at 0.2x
+Cards stagger-enter with ScrollTrigger: each card translates from y:60 to y:0 with 0.08s stagger
+Section title drifts at 0.5x speed relative to cards
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7: PROJECTS SECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Section heading: "The Works" | "Selected Projects" as subtitle
+
+Projects:
+
+1. CineStream — Movie Streaming Platform (React, Node.js, MongoDB)
+2. FocusBoard — Productivity Dashboard (React, Tailwind, MySQL)
+3. AttendAI — Smart Attendance System (Python, OpenCV, Node.js)
+4. VentureKit — Startup Concept & Landing Sites (HTML, CSS, JS)
+5. Portfolio OS — Cinematic Portfolio Experience (GSAP, HTML, CSS)
+
+Each project as a large editorial FEATURE CARD:
+• Full-width on mobile, alternating left-right layout on desktop (odd cards: image left, text right; even: reversed)
+• Project number in huge Cormorant 300 (e.g. "01") as BG watermark, opacity 0.06
+• Project title in Cormorant 600, 2.5rem
+• One-line description in Inter 300
+• Tech stack as small pill tags (--border color background, --ink text)
+• "View Project →" antique-styled link
+• Decorative aged-photo placeholder with sepia filter and vignette
+
+3D HOVER on cards:
+Use CSS perspective: 1000px on parent
+On mousemove: calculate mouse position relative to card center, apply rotateX and rotateY (max ±8deg) via JS
+Add a subtle highlight shine that follows mouse position (radial gradient overlay)
+
+PARALLAX in Projects:
+Each card's BG number watermark scrolls at 0.2x (slower than card)
+Cards themselves enter from y:80 with ScrollTrigger, staggered
+Section BG has a large faded architectural blueprint grid (CSS, opacity 0.03) scrolling at 0.15x
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8: PARALLAX ENGINE — IMPLEMENTATION DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+In parallax.js, implement a global parallax system:
+
+1. GSAP ScrollTrigger-based (for elements pinned to sections):
+   Every section has data-parallax-bg, data-parallax-mid, data-parallax-fg attributes
+   On init, query all these, register ScrollTrigger for each with scrub: 1
+
+2. RequestAnimationFrame-based (for cursor-reactive floating elements):
+   Track scrollY with a lerped value (lerpedScroll += (scrollY - lerpedScroll) _ 0.08)
+   Apply transforms to floating elements based on lerpedScroll _ speedMultiplier
+
+3. Scroll smoothing:
+   Use Lenis smooth scroll library (CDN) for buttery smooth scroll momentum
+   Init: const lenis = new Lenis({ duration: 1.8, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 _ t)) })
+   Connect Lenis to GSAP ticker: gsap.ticker.add((time) => lenis.raf(time _ 1000))
+
+4. IntersectionObserver for section entrance animations (fallback + performance):
+   Elements with class .reveal start at opacity:0, y:40
+   When they enter viewport, GSAP animates them to opacity:1, y:0
+
+5. Mobile handling:
+   If window.innerWidth < 768 OR prefers-reduced-motion is set:
+   Disable Lenis, set scroll-behavior: smooth on html
+   Reduce parallax yPercent values by 60%
+   Disable 3D card tilt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 9: CONTACT SECTION & FOOTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Contact section:
+Large centered heading: "Let's Build Something" in Cormorant 600, 5rem
+Subheading: "Real. Ambitious. Extraordinary." in small-caps
+Email displayed as large antique-press styled text link
+Social links: GitHub, LinkedIn — as icon+text antique labels
+Decorative ornamental border frames the whole section
+
+PARALLAX in Contact:
+Heading text splits into words, each word has slight different parallax rate
+Background: large faded compass rose (SVG, opacity 0.05) slowly rotates AND scrolls at 0.1x
+
+Footer:
+Styled as antique newspaper footer
+Top: thin double ornamental border
+Left: "© MMXXV Zenith Kandel" in Cormorant small-caps
+Center: ornamental logo mark
+Right: "Kathmandu, Nepal" with small compass mark
+Very bottom: "Handcrafted with obsessive attention to detail."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 10: PERFORMANCE & POLISH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• All images: loading="lazy", proper width/height attributes
+• SVG decorative elements: aria-hidden="true", role="presentation"
+• GSAP: use will-change: transform on parallax elements, remove after animation completes
+• No layout shifts: reserve space for all animated elements
+• Page load order: CSS first → HTML → GSAP CDN → main.js (defer)
+• Preload Cormorant Garamond font with
+• All scroll animations use transform (not top/left) for GPU acceleration
+• requestAnimationFrame loop must check document visibility (pause when tab is hidden)
+
+Breakpoints:
+Mobile: 320px–767px (single column, reduced parallax, stacked nav)
+Tablet: 768px–1199px (2-col grids, moderate parallax)
+Desktop: 1200px–1599px (full experience)
+Ultrawide: 1600px+ (max-width: 1400px container centered, enhanced parallax depth)
+
+Accessibility:
+prefers-reduced-motion media query must disable ALL animations and parallax
+Focus styles on all interactive elements
+ARIA labels on icon-only buttons
+Color contrast ratios must pass WCAG AA
