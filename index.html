@@ -31,16 +31,16 @@
             <li><a href="#projects" data-section="3">Projects</a></li>
             <li><a href="#contact" data-section="4">Contact</a></li>
         </ul>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-            <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
-                <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
-            </svg>
-        </button>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+    </button>
 
     <div class="mobile-nav" id="mobileNav">
         <ul class="mobile-nav-links">
@@ -53,7 +53,7 @@
 
     <main>
         <section class="hero" id="hero">
-            <div class="hero-bg-layer" data-parallax="0.15">
+            <div class="hero-bg-layer">
                 <svg class="world-map-outline" viewBox="0 0 800 400" aria-hidden="true">
                     <path d="M100,100 Q200,80 300,100 T500,100 T700,100" fill="none" stroke="currentColor" stroke-width="1"/>
                     <path d="M50,200 Q150,180 250,200 T450,200 T650,200 T750,200" fill="none" stroke="currentColor" stroke-width="0.5"/>
@@ -63,7 +63,31 @@
                 <div class="coordinate-line coordinate-v"></div>
             </div>
 
-            <div class="hero-mid-layer" data-parallax="0.35">
+            <div class="hero-buildings-layer">
+                <svg class="buildings" viewBox="0 0 1200 400" aria-hidden="true">
+                    <rect x="50" y="200" width="60" height="200" fill="var(--ink-muted)" opacity="0.08"/>
+                    <rect x="120" y="150" width="80" height="250" fill="var(--ink-muted)" opacity="0.1"/>
+                    <rect x="210" y="180" width="50" height="220" fill="var(--ink-muted)" opacity="0.07"/>
+                    <rect x="270" y="100" width="100" height="300" fill="var(--ink-muted)" opacity="0.12"/>
+                    <rect x="380" y="220" width="40" height="180" fill="var(--ink-muted)" opacity="0.06"/>
+                    <rect x="950" y="180" width="70" height="220" fill="var(--ink-muted)" opacity="0.1"/>
+                    <rect x="1030" y="140" width="90" height="260" fill="var(--ink-muted)" opacity="0.11"/>
+                    <rect x="1130" y="200" width="50" height="200" fill="var(--ink-muted)" opacity="0.08"/>
+                    <polygon points="120,150 160,100 200,150" fill="var(--ink-muted)" opacity="0.08"/>
+                    <polygon points="270,100 320,40 370,100" fill="var(--ink-muted)" opacity="0.1"/>
+                    <polygon points="1030,140 1080,80 1130,140" fill="var(--ink-muted)" opacity="0.09"/>
+                </svg>
+            </div>
+
+            <div class="hero-silhouette-layer">
+                <svg class="silhouette" viewBox="0 0 1200 200" aria-hidden="true">
+                    <path d="M0,200 L0,150 Q50,140 100,160 Q150,140 200,155 Q250,135 300,150 L300,200 Z" fill="var(--ink-muted)" opacity="0.06"/>
+                    <path d="M400,200 L400,160 Q450,150 500,170 Q550,150 600,165 Q650,145 700,160 L700,200 Z" fill="var(--ink-muted)" opacity="0.05"/>
+                    <path d="M800,200 L800,140 Q850,130 900,150 Q950,130 1000,145 Q1050,125 1100,140 Q1150,120 1200,135 L1200,200 Z" fill="var(--ink-muted)" opacity="0.07"/>
+                </svg>
+            </div>
+
+            <div class="hero-mid-layer">
                 <svg class="compass-rose" viewBox="0 0 100 100" aria-hidden="true">
                     <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="1"/>
                     <path d="M50,10 L50,90 M10,50 L90,50" stroke="currentColor" stroke-width="0.5"/>
@@ -74,6 +98,17 @@
                 </svg>
                 <div class="ornamental-frame"></div>
                 <span class="watermark-roman">I</span>
+            </div>
+
+            <div class="hero-particles">
+                <span class="particle p1">✦</span>
+                <span class="particle p2">✦</span>
+                <span class="particle p3">✦</span>
+                <span class="particle p4">✦</span>
+                <span class="particle p5">✦</span>
+                <span class="particle p6">✦</span>
+                <span class="particle p7">✦</span>
+                <span class="particle p8">✦</span>
             </div>
 
             <div class="hero-content">
@@ -94,7 +129,7 @@
                 <a href="#projects" class="cta-button">Explore Work →</a>
             </div>
 
-            <div class="hero-fg-layer" data-parallax="0.6">
+            <div class="hero-fg-layer">
                 <span class="floating-tag tag-1">[ developer ]</span>
                 <span class="floating-tag tag-2">[ builder ]</span>
                 <span class="floating-tag tag-3">[ designer ]</span>
