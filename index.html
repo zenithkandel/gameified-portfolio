@@ -25,18 +25,26 @@
     <div class="curtain-right" aria-hidden="true"></div>
 
     <nav class="navbar" id="navbar">
-        <a href="#" class="nav-monogram">ZK</a>
         <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
             <span></span>
             <span></span>
             <span></span>
         </button>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about" data-section="1">About</a></li>
+            <li><a href="#skills" data-section="2">Skills</a></li>
+            <li><a href="#projects" data-section="3">Projects</a></li>
+            <li><a href="#contact" data-section="4">Contact</a></li>
         </ul>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </button>
     </nav>
 
     <div class="mobile-nav" id="mobileNav">
@@ -505,9 +513,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="js/cursor.js"></script>
-    <script src="js/parallax.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
